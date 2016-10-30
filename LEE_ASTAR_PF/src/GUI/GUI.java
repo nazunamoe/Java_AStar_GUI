@@ -16,9 +16,10 @@ public class GUI extends JFrame {
 	static Main ASTAR;
 
 	GUI(Main ASTAR) {
+		
 
 		setTitle("A-STAR Algorithm");
-		setSize(1000, 1000);
+		setSize(500, 500);
 		setVisible(true);
 		Container c = getContentPane();
 
@@ -38,13 +39,16 @@ public class GUI extends JFrame {
 
 		public BGR() {
 
-			setSize(600, 100);
 
 			setBackground(null);
+			
+			Container M = getContentPane();
+			
+			setSize((int) ((M.getSize().height) * (1.0)), (int) ((M.getSize().width) * (0.08)));
 
-			setLocation(100, 800);
+			setLocation(10,(int) ((M.getSize().height) * (0.8))+30);
 
-			setLayout(new GridLayout(1, 3, 80, 0));
+			setLayout(new GridLayout(1, 3, 30, 0));
 
 			JButton buttons_BUI[] = new JButton[3];
 
@@ -93,7 +97,7 @@ public class GUI extends JFrame {
 
 			Container M = getContentPane();
 			setResizable(false);
-			setSize((int) ((M.getSize().height) * (0.2)), (int) ((M.getSize().width) * (0.8)));
+			setSize((int) ((M.getSize().height) * (0.2)), (int) ((M.getSize().width) * (0.9)));
 
 			setLocation((int) ((M.getSize().height) * (0.8)), 0);
 
