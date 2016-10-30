@@ -1,7 +1,5 @@
 package Astar;
 
-
-
 public class Point
 {
 	int x, y;

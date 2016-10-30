@@ -1,29 +1,13 @@
 package Astar;
 
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-
-/*
- * 
- * 
- * 건들지 마라 이거 자료 구조 임 
- * 
- * 이거 건들면 좆되다 
- * 
- */
-
-
-
 public class MinHeap {
 	private final ArrayList<Data> queue = new ArrayList<>();
-
 	private int endPnt = 0;
-
 	private final Map<String, Data> index = new HashMap<>();
-
 	public Data getAndRemoveMin() {
 		if (isEmpty()) {
 			return null;
@@ -43,27 +27,9 @@ public class MinHeap {
 		return head;
 	}
 
-	
-	
-	
-	
-	
-	
-	
 	public Data find(Point pnt) {
 		return index.get(getKey(pnt));
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	public void add(Data data) {
 		if (queue.size() > endPnt) {
@@ -78,40 +44,15 @@ public class MinHeap {
 		bottomUp();
 	}
 
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public boolean isEmpty() {
 		
 		System.out.println(" heep 용량 " + endPnt);  // 다버그
 		return endPnt <= 0;
 	}
 
-	
-	
-	
-	
-	
-	
-	
 	private String getKey(Point pnt) {
 		return String.format("%d-%d", pnt.x, pnt.y); // 거리 차이 
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	private void topDown() {
 		for (int cur = 0; cur < endPnt;) {
@@ -133,7 +74,6 @@ public class MinHeap {
 				next = right;
 				dn = dr;
 			}
-
 			if (next >= 0 && next < endPnt) {
 				queue.set(next, dc);
 				queue.set(cur, dn);
@@ -142,23 +82,10 @@ public class MinHeap {
 				break;
 			}
 		}
-
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-
-	private void bottomUp() {
-		
-				
+	private void bottomUp() {		
 		for (int cur = endPnt - 1; cur >= 0;) {
-			
-			
 			int parent = (cur - 1) / 2;         
 			if (parent < 0) {
 				break;
@@ -176,15 +103,4 @@ public class MinHeap {
 			}
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 }

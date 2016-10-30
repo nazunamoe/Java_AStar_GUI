@@ -2,10 +2,6 @@ package Astar;
 
 /*
  * 가중치 저장용 데이타형 
- * 
- * 
- * 
- * 
  */
 public class Data
 {
