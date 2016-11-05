@@ -1,10 +1,7 @@
 package GUI;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Panel;
@@ -12,13 +9,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
 import Astar.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 
 public class GUI extends JFrame {
 
 	static Main ASTAR;
 
 	GUI(Main ASTAR) {
-		int Mode;
 		Font main = new Font("¸¼Àº °íµñ",0,30);
 		Font sub = new Font("¸¼Àº °íµñ",0,15);
 		
@@ -46,8 +47,12 @@ public class GUI extends JFrame {
 	}
 	
 	public static class status extends Panel{
+		public JFileChooser jfc = new JFileChooser();
 		static int Mode;
-		static Button buttons[][] = new Button[20][20];
+		static Button buttons[][] = new Button[10][10];
+		static File text;
+		static FileReader fr;
+		static BufferedReader br;
 	}
 
 	public class BGR extends status {
@@ -137,10 +142,12 @@ public class GUI extends JFrame {
 								Mode = 0;
 								switch(i){
 								case 0:{
-									
+					                jfc.setFileFilter(new FileNameExtensionFilter("txt", "txt"));
+									 if(jfc.showOpenDialog(M) == JFileChooser.APPROVE_OPTION){
+										text=jfc.getSelectedFile();}
+										break;
 								}
 								case 1:{
-									
 								}
 								case 2:{
 									
