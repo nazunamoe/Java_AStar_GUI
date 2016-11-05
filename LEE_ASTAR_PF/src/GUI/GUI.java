@@ -2,6 +2,7 @@ package GUI;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -17,7 +18,7 @@ public class GUI extends JFrame {
 	static Main ASTAR;
 
 	GUI(Main ASTAR) {
-		
+		int Mode;
 		Font main = new Font("맑은 고딕",0,30);
 		Font sub = new Font("맑은 고딕",0,15);
 		
@@ -43,8 +44,12 @@ public class GUI extends JFrame {
 
 		// setResizable(false);
 	}
+	
+	public static class status extends Panel{
+		static int Mode;
+	}
 
-	public class BGR extends Panel {
+	public class BGR extends status {
 		Main ASTAR;
 		public BGR() {
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
@@ -60,12 +65,23 @@ public class GUI extends JFrame {
 					public void actionPerformed(ActionEvent a) {
 						for (int i = 0; i < buttons_BUI.length; i++) {
 							if (a.getSource() == buttons_BUI[i]) {
-								System.out.println(buttons_BUI[i].getText());
-								/*
-								 * 액션으로 받아들인 배결 주소 입력
-								 * 
-								 */
-
+								switch(buttons_BUI[i].getText()){
+								case "출발점 지정" :{
+									System.out.println("출발점 지정");
+									Mode = 1;
+									break;
+								}
+								case "도착점 지정" :{
+									System.out.println("도착점 지정");
+									Mode = 2;
+									break;
+								}
+								case "출발! 드림팀" :{
+									System.out.println("출발! 드림팀");
+									Mode = 0;
+									break;
+								}
+								}
 							}
 						}
 					}
@@ -84,15 +100,15 @@ public class GUI extends JFrame {
 		}
 	}
 
-	public class RUI extends Panel {
+	public class RUI extends status {
 		Main ASTAR;
 		public RUI() {
 			setBackground(Color.DARK_GRAY);
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
 			Container M = getContentPane();
 			setResizable(false);
-			setSize((int) ((M.getSize().height) * (0.2))+15, (int) ((M.getSize().width) * (0.9)));
-			setLocation((int) ((M.getSize().height) * (0.8)), 10);
+			setSize((int) ((M.getSize().height) * (0.2))+6, (int) ((M.getSize().width) * (0.9)));
+			setLocation((int) ((M.getSize().height) * (0.84)), 10);
 			setLayout(new GridLayout(6, 1, 0, 20));
 			JButton buttons_BUI[] = new JButton[5];
 			for (int i = 0; i < buttons_BUI.length; i++) {
@@ -101,11 +117,7 @@ public class GUI extends JFrame {
 					public void actionPerformed(ActionEvent a) {
 						for (int i = 0; i < buttons_BUI.length; i++) {
 							if (a.getSource() == buttons_BUI[i]) {
-								System.out.println(buttons_BUI[i].getText());
-								/*
-								 * 액션으로 받아들인 배결 주소 입력
-								 * 
-								 */
+								Mode = 0;
 							}
 						}
 					}
@@ -114,7 +126,7 @@ public class GUI extends JFrame {
 				add(buttons_BUI[i]);
 			}
 			buttons_BUI[0].setText("맵 가져오기");
-			buttons_BUI[1].setText("앱 에디터");
+			buttons_BUI[1].setText("맵 에디터");
 			buttons_BUI[2].setText("맵 저장");
 			buttons_BUI[3].setText("경로 초기화");
 			buttons_BUI[4].setText("경로저장");
@@ -125,7 +137,7 @@ public class GUI extends JFrame {
 		}
 	}
 
-	public class showmap extends Panel {
+	public class showmap extends status {
 		Main ASTAR;
 		public void name() {
 		}
@@ -135,13 +147,13 @@ public class GUI extends JFrame {
 		public showmap() {
 			Container M = getContentPane();
 			// 맵 크기 받아서 그리드 레이 아웃으로 추가 해야함
-			JButton buttons[][] = new JButton[20][20];
+			Button buttons[][] = new Button[20][20];
 			setLayout(null);
 			final int sizeX = (int) ((M.getSize().height) * (0.8));
 			final int sizeY = (int) ((M.getSize().width) * (0.8));
 			int buttons_sizeX = (sizeX / buttons.length);
 			int buttons_sizeY = (sizeY / buttons[0].length);
-			setSize(sizeX, sizeY);
+			setSize(sizeX+5, sizeY+5);
 			setBackground(Color.DARK_GRAY);
 			Color c = Color.DARK_GRAY;
 			int l = 0;
@@ -149,7 +161,7 @@ public class GUI extends JFrame {
 			int b = 10;
 			for (int i = 0; i < buttons.length; i++) {
 				for (int j = 0; j < buttons[0].length; j++) {
-					buttons[i][j] = new JButton("");
+					buttons[i][j] = new Button('b');
 					buttons[i][j].setSize(buttons_sizeX, buttons_sizeY);
 					buttons[i][j].setLocation(a, b);
 					buttons[i][j].addActionListener(new ActionListener() {
@@ -157,17 +169,58 @@ public class GUI extends JFrame {
 							for (int i = 0; i < buttons.length; i++) {
 								for (int j = 0; j < buttons[0].length; j++) {
 									if (e.getSource() == buttons[i][j]) {
-										System.out.println("(" + i + "," + j + ")");
-										Color temp = buttons[i][j].getBackground();
-										if (temp.equals(c)) {
-											buttons[i][j].setBackground(Color.GREEN);
-										} else {
-											buttons[i][j].setBackground(null);
+										System.out.println(Mode);
+										int blocked = 0;
+										switch(Mode){
+										case 1:{
+											for (int a = 0; a < buttons.length; a++) {
+												for (int b = 0; b < buttons[0].length; b++) {
+													if(buttons[a][b].status == 's'){
+														if(a!=i||b!=j){
+														System.out.println("출발점 2개이상 불가능");
+														blocked = 1;
+														buttons[i][j].status = 'b';
+														buttons[i][j].setBackground(Color.DARK_GRAY);}
+														else if(a==i&&b==j){
+															System.out.println("출발점 해제됨");
+															blocked = 1;
+															buttons[i][j].status = 'b';
+															buttons[i][j].setBackground(Color.DARK_GRAY);
+														}
+														break;
+													}
+												}
+											}if(blocked == 0){
+											buttons[i][j].status = 's';
+											buttons[i][j].setBackground(Color.green);}
+											break;
 										}
-										/*
-										 * 액션으로 받아들인 배결 주소 입력
-										 * 
-										 */
+										case 2:{
+											for (int a = 0; a < buttons.length; a++) {
+												for (int b = 0; b < buttons[0].length; b++) {
+													if(buttons[a][b].status == 'e'){
+														if(a!=i||b!=j){
+															System.out.println("도착점 2개이상 불가능");
+															blocked = 1;
+															buttons[i][j].status = 'b';
+															buttons[i][j].setBackground(Color.DARK_GRAY);}
+															else if(a==i&&b==j){
+																System.out.println("도착점 해제됨");
+																blocked = 1;
+																buttons[i][j].status = 'b';
+																buttons[i][j].setBackground(Color.DARK_GRAY);
+															}
+															break;
+													}
+												}
+											}
+											if(blocked == 0){
+												buttons[i][j].status = 'e';
+												buttons[i][j].setBackground(Color.red);}
+											break;
+										}
+										case 0:{}
+										}
 									}
 								}
 							}
@@ -183,8 +236,6 @@ public class GUI extends JFrame {
 				}
 				b += buttons_sizeY;
 			}
-			// setResizable(false);
 		}
-		//////////////////////
 	}
 }
