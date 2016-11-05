@@ -13,7 +13,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.IOException;
 
 public class GUI extends JFrame {
 
@@ -48,11 +50,11 @@ public class GUI extends JFrame {
 	
 	public static class status extends Panel{
 		public JFileChooser jfc = new JFileChooser();
+		static int row=10;
+		static int column=10;
 		static int Mode;
-		static Button buttons[][] = new Button[10][10];
+		static Button buttons[][] = new Button[row][column];
 		static File text;
-		static FileReader fr;
-		static BufferedReader br;
 	}
 
 	public class BGR extends status {
@@ -145,15 +147,68 @@ public class GUI extends JFrame {
 					                jfc.setFileFilter(new FileNameExtensionFilter("txt", "txt"));
 									 if(jfc.showOpenDialog(M) == JFileChooser.APPROVE_OPTION){
 										text=jfc.getSelectedFile();}
+									 buttons_BUI[1].setEnabled(true);
+										buttons_BUI[2].setEnabled(true);
 										break;
 								}
 								case 1:{
+									String line = "";
+									int pointerx = 0;
+									int pointery = 0;
+									char pointer;
+									try {
+										BufferedReader br = new BufferedReader(new FileReader(text));
+										while((line = br.readLine()) != null) {
+											for(int y=0; y<line.length(); y++){
+					                        pointer = line.charAt(y);
+					                        if(pointer == '0' ||pointer == 'E' ||pointer == 'S'||pointer == 'B'){
+					                        	if(pointer == '\n'){
+					                        		pointerx = 0;
+					                        		pointery++;
+					                        		continue;
+					                        	}
+					                        	System.out.println(pointer);
+					                        	if(pointer == '0'){
+					                        		buttons[pointerx][pointery].setBackground(Color.DARK_GRAY);
+					                        		buttons[pointerx][pointery].block=false;
+					                        		buttons[pointerx][pointery].status='b';
+					                        	}
+					                        	else if(pointer == 'S'){
+					                        		buttons[pointerx][pointery].setBackground(Color.GREEN);
+					                        		buttons[pointerx][pointery].block=true;
+					                        		buttons[pointerx][pointery].status='s';
+					                        	}
+					                        	else if(pointer == 'E'){
+					                        		buttons[pointerx][pointery].setBackground(Color.RED);
+					                        		buttons[pointerx][pointery].block=true;
+					                        		buttons[pointerx][pointery].status='e';
+					                        	}
+					                        	else if(pointer == 'B'){
+					                        		buttons[pointerx][pointery].setBackground(Color.WHITE);
+					                        		buttons[pointerx][pointery].block=true;
+					                        		buttons[pointerx][pointery].status='w';
+					                        	}
+					                        	pointerx++;
+					                        }else{
+					                        	continue;
+					                        }
+										} pointery++;
+										
+										pointerx = 0;
+										}
+									buttons = new Button[row][column];
+									} catch (IOException e) {
+										// TODO Auto-generated catch block
+										e.printStackTrace();
+									}
+									break;
 								}
 								case 2:{
 									
+									break;
 								}
 								case 3:{
-									
+									break;
 								}
 								case 4:{
 									System.exit(1);
@@ -167,10 +222,12 @@ public class GUI extends JFrame {
 				add(buttons_BUI[i]);
 			}
 			buttons_BUI[0].setText("맵 가져오기");
-			buttons_BUI[1].setText("맵 저장");
-			buttons_BUI[2].setText("경로 초기화");
-			buttons_BUI[3].setText("경로 저장");
-			buttons_BUI[4].setText("탐색 시작");
+			buttons_BUI[1].setText("맵 분석");
+			buttons_BUI[2].setText("탐색 시작");
+			buttons_BUI[3].setText("정보");
+			buttons_BUI[4].setText("종료");
+			buttons_BUI[1].setEnabled(false);
+			buttons_BUI[2].setEnabled(false);
 			for(int i=0; i<=4; i++){
 				buttons_BUI[i].setFont(sub);
 				buttons_BUI[i].setForeground(Color.WHITE);
@@ -262,8 +319,10 @@ public class GUI extends JFrame {
 											for (int a = 0; a < buttons.length; a++) {
 												for (int b = 0; b < buttons[0].length; b++) {
 													if(!buttons[i][j].block){
-													buttons[i][j].setBackground(Color.LIGHT_GRAY);
-													buttons[i][j].block = true;}else break;}
+													buttons[i][j].setBackground(Color.WHITE);
+													buttons[i][j].block = true;
+													buttons[i][j].status = 'w';
+													}else break;}
 													}
 											break;
 										}
