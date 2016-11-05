@@ -47,6 +47,7 @@ public class GUI extends JFrame {
 	
 	public static class status extends Panel{
 		static int Mode;
+		static Button buttons[][] = new Button[20][20];
 	}
 
 	public class BGR extends status {
@@ -172,15 +173,10 @@ public class GUI extends JFrame {
 
 	public class showmap extends status {
 		Main ASTAR;
-		public void name() {
-		}
-		/**
-		 * Create the panel.
-		 */
 		public showmap() {
 			Container M = getContentPane();
 			// 맵 크기 받아서 그리드 레이 아웃으로 추가 해야함
-			Button buttons[][] = new Button[20][20];
+			
 			setLayout(null);
 			final int sizeX = (int) ((M.getSize().height) * (0.8));
 			final int sizeY = (int) ((M.getSize().width) * (0.8));
