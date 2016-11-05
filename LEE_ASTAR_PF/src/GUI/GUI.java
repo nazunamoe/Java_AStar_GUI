@@ -193,10 +193,8 @@ public class GUI extends JFrame {
 					                        	continue;
 					                        }
 										} pointery++;
-										
 										pointerx = 0;
 										}
-									buttons = new Button[row][column];
 									} catch (IOException e) {
 										// TODO Auto-generated catch block
 										e.printStackTrace();
@@ -204,13 +202,32 @@ public class GUI extends JFrame {
 									break;
 								}
 								case 2:{
-									
+									boolean start=false;
+									boolean end=false;
+									for (int r = 0; r < buttons.length; r++) {
+										for (int j = 0; j < buttons[0].length; j++) {
+											if(buttons[r][j].status=='S'){
+												start = true;
+											}
+											if(buttons[r][j].status=='E'){
+												end = true;
+											}
+										}
+									}
+									if(start&&end){
+										// 출발점과 도착점을 검사하여 둘 다 있을 경우에만 작동하도록 구성
+										// 이곳에 탐색 메서드가 들어감
+									}else{
+										// 출발점이나 도착점 둘중 하나라도 없으면 작동 불가능
+									}
 									break;
 								}
 								case 3:{
+									// 프로그램에 대한 간단한 정보를 팝업으로 보여줌, 솔직히 쓸모없는 기능이긴한데 그냥 버튼이 남아서 만든거
 									break;
 								}
 								case 4:{
+									// 종료기능, 처음 틀에는 없던건데 역시 버튼이 남아서 만든거
 									System.exit(1);
 								}
 								}
