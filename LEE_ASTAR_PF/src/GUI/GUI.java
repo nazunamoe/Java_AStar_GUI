@@ -57,8 +57,8 @@ public class GUI extends JFrame {
 			Container M = getContentPane();			
 			setSize((int) ((M.getSize().height) * (1.0)), (int) ((M.getSize().width) * (0.08))-15);
 			setLocation(10,(int) ((M.getSize().height) * (0.8))+30);
-			setLayout(new GridLayout(1, 3, 30, 0));
-			JButton buttons_BUI[] = new JButton[3];
+			setLayout(new GridLayout(1, 1, 3, 0));
+			JButton buttons_BUI[] = new JButton[4];
 			for (int i = 0; i < buttons_BUI.length; i++) {
 				buttons_BUI[i] = new JButton("매뉴" + (i + 1));
 				buttons_BUI[i].addActionListener(new ActionListener() {
@@ -74,6 +74,10 @@ public class GUI extends JFrame {
 								case "도착점 지정" :{
 									System.out.println("도착점 지정");
 									Mode = 2;
+									break;
+								}
+								case "장애물 지정" :{
+									Mode = 3;
 									break;
 								}
 								case "출발! 드림팀" :{
@@ -92,8 +96,9 @@ public class GUI extends JFrame {
 			}
 			buttons_BUI[0].setText("출발점 지정");
 			buttons_BUI[1].setText("도착점 지정");
-			buttons_BUI[2].setText("출발! 드림팀");
-			for(int i=0; i<=2; i++){
+			buttons_BUI[2].setText("장애물 지정");
+			buttons_BUI[3].setText("출발! 드림팀");
+			for(int i=0; i<=3; i++){
 				buttons_BUI[i].setFont(sub);
 				buttons_BUI[i].setForeground(Color.WHITE);
 			}
@@ -169,7 +174,6 @@ public class GUI extends JFrame {
 							for (int i = 0; i < buttons.length; i++) {
 								for (int j = 0; j < buttons[0].length; j++) {
 									if (e.getSource() == buttons[i][j]) {
-										System.out.println(Mode);
 										int blocked = 0;
 										switch(Mode){
 										case 1:{
@@ -178,21 +182,23 @@ public class GUI extends JFrame {
 													if(buttons[a][b].status == 's'){
 														if(a!=i||b!=j){
 														System.out.println("출발점 2개이상 불가능");
-														blocked = 1;
-														buttons[i][j].status = 'b';
-														buttons[i][j].setBackground(Color.DARK_GRAY);}
+														blocked = 1;}
 														else if(a==i&&b==j){
 															System.out.println("출발점 해제됨");
 															blocked = 1;
 															buttons[i][j].status = 'b';
 															buttons[i][j].setBackground(Color.DARK_GRAY);
+														}else if(buttons[i][j].block){
+															System.out.println("중복 설정 불가능. 해제후 재시도");
+															break;
 														}
 														break;
 													}
 												}
 											}if(blocked == 0){
 											buttons[i][j].status = 's';
-											buttons[i][j].setBackground(Color.green);}
+											buttons[i][j].setBackground(Color.green);
+											buttons[i][j].block = true;}
 											break;
 										}
 										case 2:{
@@ -201,14 +207,15 @@ public class GUI extends JFrame {
 													if(buttons[a][b].status == 'e'){
 														if(a!=i||b!=j){
 															System.out.println("도착점 2개이상 불가능");
-															blocked = 1;
-															buttons[i][j].status = 'b';
-															buttons[i][j].setBackground(Color.DARK_GRAY);}
+															blocked = 1;}
 															else if(a==i&&b==j){
 																System.out.println("도착점 해제됨");
 																blocked = 1;
 																buttons[i][j].status = 'b';
 																buttons[i][j].setBackground(Color.DARK_GRAY);
+															}else if(buttons[i][j].block){
+																System.out.println("중복 설정 불가능. 해제후 재시도");
+																break;
 															}
 															break;
 													}
@@ -216,7 +223,17 @@ public class GUI extends JFrame {
 											}
 											if(blocked == 0){
 												buttons[i][j].status = 'e';
-												buttons[i][j].setBackground(Color.red);}
+												buttons[i][j].setBackground(Color.red);
+												buttons[i][j].block = true;}
+											break;
+										}
+										case 3:{
+											for (int a = 0; a < buttons.length; a++) {
+												for (int b = 0; b < buttons[0].length; b++) {
+													if(!buttons[i][j].block){
+													buttons[i][j].setBackground(Color.LIGHT_GRAY);
+													buttons[i][j].block = true;}else break;}
+													}
 											break;
 										}
 										case 0:{}
