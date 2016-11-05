@@ -80,8 +80,17 @@ public class GUI extends JFrame {
 									Mode = 3;
 									break;
 								}
-								case "출발! 드림팀" :{
-									System.out.println("출발! 드림팀");
+								case "편집기 시작" :{
+									for(int x=0; x<3; x++){
+									buttons_BUI[x].setEnabled(true);}
+									buttons_BUI[3].setText("편집기 종료");
+									Mode = 0;
+									break;
+								}
+								case "편집기 종료" :{
+									for(int x=0; x<3; x++){
+									buttons_BUI[x].setEnabled(false);}
+									buttons_BUI[3].setText("편집기 시작");
 									Mode = 0;
 									break;
 								}
@@ -97,7 +106,9 @@ public class GUI extends JFrame {
 			buttons_BUI[0].setText("출발점 지정");
 			buttons_BUI[1].setText("도착점 지정");
 			buttons_BUI[2].setText("장애물 지정");
-			buttons_BUI[3].setText("출발! 드림팀");
+			buttons_BUI[3].setText("편집기 시작");
+			for(int x=0; x<3; x++){
+				buttons_BUI[x].setEnabled(false);}
 			for(int i=0; i<=3; i++){
 				buttons_BUI[i].setFont(sub);
 				buttons_BUI[i].setForeground(Color.WHITE);
@@ -123,6 +134,23 @@ public class GUI extends JFrame {
 						for (int i = 0; i < buttons_BUI.length; i++) {
 							if (a.getSource() == buttons_BUI[i]) {
 								Mode = 0;
+								switch(i){
+								case 0:{
+									
+								}
+								case 1:{
+									
+								}
+								case 2:{
+									
+								}
+								case 3:{
+									
+								}
+								case 4:{
+									System.exit(1);
+								}
+								}
 							}
 						}
 					}
@@ -131,10 +159,10 @@ public class GUI extends JFrame {
 				add(buttons_BUI[i]);
 			}
 			buttons_BUI[0].setText("맵 가져오기");
-			buttons_BUI[1].setText("맵 에디터");
-			buttons_BUI[2].setText("맵 저장");
-			buttons_BUI[3].setText("경로 초기화");
-			buttons_BUI[4].setText("경로저장");
+			buttons_BUI[1].setText("맵 저장");
+			buttons_BUI[2].setText("경로 초기화");
+			buttons_BUI[3].setText("경로 저장");
+			buttons_BUI[4].setText("탐색 시작");
 			for(int i=0; i<=4; i++){
 				buttons_BUI[i].setFont(sub);
 				buttons_BUI[i].setForeground(Color.WHITE);
