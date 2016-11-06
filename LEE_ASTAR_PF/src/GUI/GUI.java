@@ -223,12 +223,17 @@ public class GUI extends JFrame {
 									break;
 								}
 								case 3:{
-									// 프로그램에 대한 간단한 정보를 팝업으로 보여줌, 솔직히 쓸모없는 기능이긴한데 그냥 버튼이 남아서 만든거
+									JOptionPane.showMessageDialog(M, "경상대학교 자료구조 및 알고리즘 TA \n\n 알고리즘 구현 : 이영섭 \n GUI 제작 : 지평강 ",
+											"제작자 정보",JOptionPane.INFORMATION_MESSAGE);
 									break;
 								}
 								case 4:{
-									// 종료기능, 처음 틀에는 없던건데 역시 버튼이 남아서 만든거
-									System.exit(1);
+									int result = 0;
+									result = JOptionPane.showConfirmDialog(M, "프로그램을 종료하시겠습니까?","종료",JOptionPane.INFORMATION_MESSAGE);
+									if(result == JOptionPane.CANCEL_OPTION||result == JOptionPane.CLOSED_OPTION){
+										break;
+									}if(result == JOptionPane.OK_OPTION){
+									System.exit(1);}
 								}
 								}
 							}
