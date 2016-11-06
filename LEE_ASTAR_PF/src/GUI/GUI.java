@@ -50,8 +50,8 @@ public class GUI extends JFrame {
 	
 	public static class status extends Panel{
 		public JFileChooser jfc = new JFileChooser();
-		static int row=10;
-		static int column=10;
+		static int row=20;
+		static int column=20;
 		static int Mode;
 		static Button buttons[][] = new Button[row][column];
 		static File text;
@@ -125,6 +125,29 @@ public class GUI extends JFrame {
 	}
 
 	public class RUI extends status {
+		
+		public void MapClean(){
+			text = null;
+			for (int r = 0; r < buttons.length; r++) {
+				for (int j = 0; j < buttons[0].length; j++) {
+					buttons[r][j].status = 'b';
+					buttons[r][j].block = false;
+					buttons[r][j].setBackground(Color.DARK_GRAY);
+				}
+			}
+		}
+		
+		public void RoadClean(){
+			for (int r = 0; r < buttons.length; r++) {
+				for (int j = 0; j < buttons[0].length; j++) {
+					// 아직 미구현 기능, 지나간 경로를 지우는 기능
+					buttons[r][j].status = 'b';
+					buttons[r][j].block = false;
+					buttons[r][j].setBackground(Color.DARK_GRAY);
+				}
+			}
+		}
+		
 		Main ASTAR;
 		public RUI() {
 			setBackground(Color.DARK_GRAY);
@@ -152,6 +175,8 @@ public class GUI extends JFrame {
 										break;
 								}
 								case 1:{
+									boolean start = false;
+									boolean end = false;
 									String line = "";
 									int pointerx = 0;
 									int pointery = 0;
@@ -174,14 +199,28 @@ public class GUI extends JFrame {
 					                        		buttons[pointerx][pointery].status='b';
 					                        	}
 					                        	else if(pointer == 'S'){
+					                        		if(start){
+					                        			JOptionPane.showMessageDialog(M, "출발점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
+					                        			br.close();
+					                        			MapClean();
+					                        			break;
+					                        		}else{
 					                        		buttons[pointerx][pointery].setBackground(Color.GREEN);
 					                        		buttons[pointerx][pointery].block=true;
 					                        		buttons[pointerx][pointery].status='s';
+					                        		start = true;}
 					                        	}
 					                        	else if(pointer == 'E'){
+					                        		if(end){
+					                        			JOptionPane.showMessageDialog(M, "도착점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
+					                        			
+					                        			MapClean();
+					                        			break;
+					                        		}else{
 					                        		buttons[pointerx][pointery].setBackground(Color.RED);
 					                        		buttons[pointerx][pointery].block=true;
 					                        		buttons[pointerx][pointery].status='e';
+					                        		end = true;}
 					                        	}
 					                        	else if(pointer == 'B'){
 					                        		buttons[pointerx][pointery].setBackground(Color.WHITE);
@@ -206,10 +245,10 @@ public class GUI extends JFrame {
 									boolean end=false;
 									for (int r = 0; r < buttons.length; r++) {
 										for (int j = 0; j < buttons[0].length; j++) {
-											if(buttons[r][j].status=='S'){
+											if(buttons[r][j].status=='s'){
 												start = true;
 											}
-											if(buttons[r][j].status=='E'){
+											if(buttons[r][j].status=='e'){
 												end = true;
 											}
 										}
