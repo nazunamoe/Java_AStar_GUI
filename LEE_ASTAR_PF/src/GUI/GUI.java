@@ -4,9 +4,12 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.Image;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import Astar.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -24,6 +27,17 @@ public class GUI extends JFrame {
 	GUI(Main ASTAR) {
 		Font main = new Font("∏º¿∫ ∞ÌµÒ",0,30);
 		Font sub = new Font("∏º¿∫ ∞ÌµÒ",0,15);
+		Image img = null;
+		
+		try {
+			File sourceimage = new File("src/overwatch.png");
+			img = ImageIO.read(sourceimage);
+		} catch (IOException e) {
+			System.out.println("¿ÃπÃ¡ˆ∆ƒ¿œ¿Ã æ¯Ω¿¥œ¥Ÿ.");
+		}
+		
+		JLabel logo = new JLabel(new ImageIcon(img));
+		
 		
 		setTitle("A-STAR Algorithm");
 		setSize(500, 500);
@@ -42,6 +56,12 @@ public class GUI extends JFrame {
 		Title.setSize(300,40);
 		Title.setFont(main);
 		Title.setForeground(Color.WHITE);
+		
+		logo.setSize(100,100);
+		logo.setLocation(385, 280);
+		add(logo);
+		
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		//		c.add(Title);
 		// setResizable(false);
 	}
@@ -205,9 +225,9 @@ public class GUI extends JFrame {
 			Font sub = new Font("∏º¿∫ ∞ÌµÒ",Font.BOLD,12);
 			Container M = getContentPane();
 			setResizable(false);
-			setSize((int) ((M.getSize().height) * (0.2))+6, (int) ((M.getSize().width) * (0.6)));
+			setSize((int) ((M.getSize().height) * (0.2))+6, (int) ((M.getSize().width) * (0.6)-30));
 			setLocation((int) ((M.getSize().height) * (0.84)), 10);
-			setLayout(new GridLayout(6, 1, 0, 20));
+			setLayout(new GridLayout(6, 1, 0, 15));
 			JButton buttons_BUI[] = new JButton[6];
 			for (int i = 0; i < buttons_BUI.length; i++) {
 				buttons_BUI[i] = new JButton("∏≈¥∫" + (i + 1));
