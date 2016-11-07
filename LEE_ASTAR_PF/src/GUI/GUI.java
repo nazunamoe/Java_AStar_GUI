@@ -196,7 +196,6 @@ public class GUI extends JFrame {
 
 	public class RUI extends status {
 	
-		
 		public void MapClean(){
 			text = null;
 			for (int r = 0; r < buttons.length; r++) {
