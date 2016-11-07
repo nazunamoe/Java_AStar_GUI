@@ -42,9 +42,7 @@ public class GUI extends JFrame {
 		Title.setSize(300,40);
 		Title.setFont(main);
 		Title.setForeground(Color.WHITE);
-		c.add(Title);
-		
-
+		//		c.add(Title);
 		// setResizable(false);
 	}
 	
@@ -81,9 +79,9 @@ public class GUI extends JFrame {
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
 			setBackground(null);		
 			Container M = getContentPane();			
-			setSize((int) ((M.getSize().height) * (1.0)), (int) ((M.getSize().width) * (0.08))-15);
-			setLocation(14,(int) ((M.getSize().height) * (0.8))+35);
-			setLayout(new GridLayout(1, 1, 13, 0));
+			setSize((int) ((M.getSize().height) * (1.0)), (int) ((M.getSize().width) * (0.08))+15);
+			setLocation(15,(int) ((M.getSize().height) * (0.8))+35);
+			setLayout(new GridLayout(2,2, 15, 5));
 			JButton buttons_BUI[] = new JButton[4];
 			for (int i = 0; i < buttons_BUI.length; i++) {
 				buttons_BUI[i] = new JButton("매뉴" + (i + 1));
@@ -93,17 +91,46 @@ public class GUI extends JFrame {
 							if (a.getSource() == buttons_BUI[i]) {
 								switch(buttons_BUI[i].getText()){
 								case "출발점 지정" :{
-									System.out.println("출발점 지정");
+									buttons_BUI[0].setText("출발점 지정 종료");
+									buttons_BUI[1].setEnabled(false);
+									buttons_BUI[2].setEnabled(false);
 									Mode = 1;
 									break;
 								}
+								case "출발점 지정 종료" :{
+									buttons_BUI[0].setText("출발점 지정");
+									buttons_BUI[1].setEnabled(true);
+									buttons_BUI[2].setEnabled(true);
+									Mode = 0;
+									break;
+								}
 								case "도착점 지정" :{
-									System.out.println("도착점 지정");
+									buttons_BUI[0].setEnabled(false);
+									buttons_BUI[1].setText("도착점 지정 종료");
+									buttons_BUI[2].setEnabled(false);
 									Mode = 2;
 									break;
 								}
+								case "도착점 지정 종료" :{
+									buttons_BUI[0].setEnabled(true);
+									buttons_BUI[1].setText("도착점 지정");
+									buttons_BUI[2].setEnabled(true);
+									Mode = 0;
+									break;
+								}
 								case "장애물 지정" :{
+									buttons_BUI[0].setEnabled(false);
+									buttons_BUI[1].setEnabled(false);
+									buttons_BUI[2].setText("장애물 지정 종료");
+									buttons_BUI[1].setText("도착점 지정");
 									Mode = 3;
+									break;
+								}
+								case "장애물 지정 종료" :{
+									buttons_BUI[0].setEnabled(true);
+									buttons_BUI[1].setEnabled(true);
+									buttons_BUI[2].setText("장애물 지정");
+									Mode = 0;
 									break;
 								}
 								case "편집기 시작" :{
@@ -118,6 +145,9 @@ public class GUI extends JFrame {
 									for(int x=0; x<3; x++){
 									buttons_BUI[x].setEnabled(false);}
 									buttons_BUI[3].setText("편집기 시작");
+									buttons_BUI[0].setText("출발점 지정");
+									buttons_BUI[1].setText("도착점 지정");
+									buttons_BUI[2].setText("장애물 지정");
 									MapDisable();
 									Mode = 0;
 									break;
