@@ -55,6 +55,24 @@ public class GUI extends JFrame {
 		static int Mode;
 		static Button buttons[][] = new Button[row][column];
 		static File text;
+		
+		
+		public void MapDisable(){
+			for (int r = 0; r < buttons.length; r++) {
+				for (int j = 0; j < buttons[0].length; j++) {
+					buttons[r][j].setEnabled(false);
+				}
+			}
+		}
+		
+		public void MapEnable(){
+			for (int r = 0; r < buttons.length; r++) {
+				for (int j = 0; j < buttons[0].length; j++) {
+					buttons[r][j].setEnabled(true);
+				}
+			}
+		}
+		
 	}
 
 	public class BGR extends status {
@@ -92,6 +110,7 @@ public class GUI extends JFrame {
 									for(int x=0; x<3; x++){
 									buttons_BUI[x].setEnabled(true);}
 									buttons_BUI[3].setText("편집기 종료");
+									MapEnable();
 									Mode = 0;
 									break;
 								}
@@ -99,6 +118,7 @@ public class GUI extends JFrame {
 									for(int x=0; x<3; x++){
 									buttons_BUI[x].setEnabled(false);}
 									buttons_BUI[3].setText("편집기 시작");
+									MapDisable();
 									Mode = 0;
 									break;
 								}
@@ -125,6 +145,7 @@ public class GUI extends JFrame {
 	}
 
 	public class RUI extends status {
+	
 		
 		public void MapClean(){
 			text = null;
@@ -329,8 +350,6 @@ public class GUI extends JFrame {
 		Main ASTAR;
 		public showmap() {
 			Container M = getContentPane();
-			// 맵 크기 받아서 그리드 레이 아웃으로 추가 해야함
-			
 			setLayout(null);
 			final int sizeX = (int) ((M.getSize().height) * (0.8));
 			final int sizeY = (int) ((M.getSize().width) * (0.8));
@@ -347,6 +366,7 @@ public class GUI extends JFrame {
 					buttons[i][j] = new Button('b');
 					buttons[i][j].setSize(buttons_sizeX, buttons_sizeY);
 					buttons[i][j].setLocation(a, b);
+					buttons[i][j].setEnabled(false);
 					buttons[i][j].addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							for (int i = 0; i < buttons.length; i++) {
@@ -365,6 +385,7 @@ public class GUI extends JFrame {
 															System.out.println("출발점 해제됨");
 															blocked = 1;
 															buttons[i][j].status = 'b';
+															buttons[i][j].block = false;
 															buttons[i][j].setBackground(Color.DARK_GRAY);
 														}else if(buttons[i][j].block){
 															System.out.println("중복 설정 불가능. 해제후 재시도");
@@ -391,6 +412,7 @@ public class GUI extends JFrame {
 																blocked = 1;
 																buttons[i][j].status = 'b';
 																buttons[i][j].setBackground(Color.DARK_GRAY);
+																buttons[i][j].block = false;
 															}else if(buttons[i][j].block){
 																System.out.println("중복 설정 불가능. 해제후 재시도");
 																break;
@@ -408,12 +430,20 @@ public class GUI extends JFrame {
 										case 3:{
 											for (int a = 0; a < buttons.length; a++) {
 												for (int b = 0; b < buttons[0].length; b++) {
-													if(!buttons[i][j].block){
-													buttons[i][j].setBackground(Color.WHITE);
-													buttons[i][j].block = true;
-													buttons[i][j].status = 'w';
-													}else break;}
+													if(buttons[a][b].status == 'w'){
+														 if(a==i&&b==j){
+																blocked = 1;
+																buttons[i][j].status = 'b';
+																buttons[i][j].setBackground(Color.DARK_GRAY);
+																break;															
+														}
 													}
+												}
+											}
+											if(blocked == 0){
+												buttons[i][j].status = 'w';
+												buttons[i][j].setBackground(Color.white);
+												buttons[i][j].block = true;}
 											break;
 										}
 										case 0:{}
