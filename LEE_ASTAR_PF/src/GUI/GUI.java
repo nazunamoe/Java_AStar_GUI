@@ -64,8 +64,8 @@ public class GUI extends JFrame {
 			setBackground(null);		
 			Container M = getContentPane();			
 			setSize((int) ((M.getSize().height) * (1.0)), (int) ((M.getSize().width) * (0.08))-15);
-			setLocation(10,(int) ((M.getSize().height) * (0.8))+30);
-			setLayout(new GridLayout(1, 1, 3, 0));
+			setLocation(14,(int) ((M.getSize().height) * (0.8))+35);
+			setLayout(new GridLayout(1, 1, 13, 0));
 			JButton buttons_BUI[] = new JButton[4];
 			for (int i = 0; i < buttons_BUI.length; i++) {
 				buttons_BUI[i] = new JButton("매뉴" + (i + 1));
@@ -154,10 +154,10 @@ public class GUI extends JFrame {
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
 			Container M = getContentPane();
 			setResizable(false);
-			setSize((int) ((M.getSize().height) * (0.2))+6, (int) ((M.getSize().width) * (0.9)));
+			setSize((int) ((M.getSize().height) * (0.2))+6, (int) ((M.getSize().width) * (0.6)));
 			setLocation((int) ((M.getSize().height) * (0.84)), 10);
 			setLayout(new GridLayout(6, 1, 0, 20));
-			JButton buttons_BUI[] = new JButton[5];
+			JButton buttons_BUI[] = new JButton[6];
 			for (int i = 0; i < buttons_BUI.length; i++) {
 				buttons_BUI[i] = new JButton("매뉴" + (i + 1));
 				buttons_BUI[i].addActionListener(new ActionListener() {
@@ -170,8 +170,10 @@ public class GUI extends JFrame {
 					                jfc.setFileFilter(new FileNameExtensionFilter("txt", "txt"));
 									 if(jfc.showOpenDialog(M) == JFileChooser.APPROVE_OPTION){
 										text=jfc.getSelectedFile();}
-									 buttons_BUI[1].setEnabled(true);
+									 	buttons_BUI[0].setEnabled(false);
+									 	buttons_BUI[1].setEnabled(true);
 										buttons_BUI[2].setEnabled(true);
+										buttons_BUI[3].setEnabled(true);
 										break;
 								}
 								case 1:{
@@ -203,6 +205,10 @@ public class GUI extends JFrame {
 					                        			JOptionPane.showMessageDialog(M, "출발점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
 					                        			br.close();
 					                        			MapClean();
+					                        			buttons_BUI[0].setEnabled(true);
+					                        			buttons_BUI[1].setEnabled(false);
+					                        			buttons_BUI[2].setEnabled(false);
+					                        			buttons_BUI[3].setEnabled(false);
 					                        			break;
 					                        		}else{
 					                        		buttons[pointerx][pointery].setBackground(Color.GREEN);
@@ -215,6 +221,10 @@ public class GUI extends JFrame {
 					                        			JOptionPane.showMessageDialog(M, "도착점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
 					                        			br.close();
 					                        			MapClean();
+					                        			buttons_BUI[0].setEnabled(true);
+					                        			buttons_BUI[1].setEnabled(false);
+					                        			buttons_BUI[2].setEnabled(false);
+					                        			buttons_BUI[3].setEnabled(false);
 					                        			break;
 					                        		}else{
 					                        		buttons[pointerx][pointery].setBackground(Color.RED);
@@ -262,11 +272,28 @@ public class GUI extends JFrame {
 									break;
 								}
 								case 3:{
+									BufferedReader br;
+									try {
+										br = new BufferedReader(new FileReader(text));
+										br.close();
+										MapClean();
+										buttons_BUI[0].setEnabled(true);
+										buttons_BUI[1].setEnabled(false);
+										buttons_BUI[2].setEnabled(false);
+										buttons_BUI[3].setEnabled(false);
+									} catch (FileNotFoundException e) {
+										e.printStackTrace();
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+									break;
+								}
+								case 4:{
 									JOptionPane.showMessageDialog(M, "경상대학교 자료구조 및 알고리즘 TA \n\n 알고리즘 구현 : 이영섭 \n GUI 제작 : 지평강 ",
 											"제작자 정보",JOptionPane.INFORMATION_MESSAGE);
 									break;
 								}
-								case 4:{
+								case 5:{
 									int result = 0;
 									result = JOptionPane.showConfirmDialog(M, "프로그램을 종료하시겠습니까?","종료",JOptionPane.INFORMATION_MESSAGE);
 									if(result == JOptionPane.CANCEL_OPTION||result == JOptionPane.CLOSED_OPTION){
@@ -285,11 +312,13 @@ public class GUI extends JFrame {
 			buttons_BUI[0].setText("맵 가져오기");
 			buttons_BUI[1].setText("맵 분석");
 			buttons_BUI[2].setText("탐색 시작");
-			buttons_BUI[3].setText("정보");
-			buttons_BUI[4].setText("종료");
+			buttons_BUI[3].setText("맵 닫기");
+			buttons_BUI[4].setText("정보");
+			buttons_BUI[5].setText("종료");
 			buttons_BUI[1].setEnabled(false);
 			buttons_BUI[2].setEnabled(false);
-			for(int i=0; i<=4; i++){
+			buttons_BUI[3].setEnabled(false);
+			for(int i=0; i<=5; i++){
 				buttons_BUI[i].setFont(sub);
 				buttons_BUI[i].setForeground(Color.WHITE);
 			}
