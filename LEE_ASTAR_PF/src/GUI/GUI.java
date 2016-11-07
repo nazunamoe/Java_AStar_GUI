@@ -213,7 +213,7 @@ public class GUI extends JFrame {
 					                        	else if(pointer == 'E'){
 					                        		if(end){
 					                        			JOptionPane.showMessageDialog(M, "µµÂøÁ¡ÀÌ µÎ °³ ÀÌ»ó Æ÷ÂøµÊ","¿¡·¯",JOptionPane.ERROR_MESSAGE);
-					                        			
+					                        			br.close();
 					                        			MapClean();
 					                        			break;
 					                        		}else{
