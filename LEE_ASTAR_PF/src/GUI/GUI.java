@@ -11,6 +11,9 @@ import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+
 import Astar.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -188,8 +191,11 @@ public class GUI extends JFrame {
 			for(int x=0; x<3; x++){
 				buttons_BUI[x].setEnabled(false);}
 			for(int i=0; i<=3; i++){
+				buttons_BUI[i].setBorderPainted(false);
+				buttons_BUI[i].setFocusPainted(false);
+				buttons_BUI[i].setContentAreaFilled(false);
 				buttons_BUI[i].setFont(sub);
-				buttons_BUI[i].setForeground(Color.WHITE);
+				buttons_BUI[i].setForeground(Color.ORANGE);
 			}
 		}
 	}
@@ -239,11 +245,11 @@ public class GUI extends JFrame {
 								case 0:{
 					                jfc.setFileFilter(new FileNameExtensionFilter("txt", "txt"));
 									 if(jfc.showOpenDialog(M) == JFileChooser.APPROVE_OPTION){
-										text=jfc.getSelectedFile();}
-									 	buttons_BUI[0].setEnabled(false);
+										text=jfc.getSelectedFile();
+									 	buttons_BUI[0].setEnabled(false); // 한번에 여러 파일 불러오기는 불가능하도록 설정함
 									 	buttons_BUI[1].setEnabled(true);
 										buttons_BUI[2].setEnabled(true);
-										buttons_BUI[3].setEnabled(true);
+										buttons_BUI[3].setEnabled(true);}
 										break;
 								}
 								case 1:{
@@ -315,7 +321,6 @@ public class GUI extends JFrame {
 										pointerx = 0;
 										}
 									} catch (IOException e) {
-										// TODO Auto-generated catch block
 										e.printStackTrace();
 									}
 									break;
@@ -337,6 +342,8 @@ public class GUI extends JFrame {
 										// 출발점과 도착점을 검사하여 둘 다 있을 경우에만 작동하도록 구성
 										// 이곳에 탐색 메서드가 들어감
 									}else{
+										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);
+										break;
 										// 출발점이나 도착점 둘중 하나라도 없으면 작동 불가능
 									}
 									break;
@@ -389,8 +396,11 @@ public class GUI extends JFrame {
 			buttons_BUI[2].setEnabled(false);
 			buttons_BUI[3].setEnabled(false);
 			for(int i=0; i<=5; i++){
+				buttons_BUI[i].setBorderPainted(false);
+				buttons_BUI[i].setFocusPainted(false);
+				buttons_BUI[i].setContentAreaFilled(false);
 				buttons_BUI[i].setFont(sub);
-				buttons_BUI[i].setForeground(Color.WHITE);
+				buttons_BUI[i].setForeground(Color.ORANGE);
 			}
 		}
 	}
@@ -416,6 +426,7 @@ public class GUI extends JFrame {
 					buttons[i][j].setSize(buttons_sizeX, buttons_sizeY);
 					buttons[i][j].setLocation(a, b);
 					buttons[i][j].setEnabled(false);
+					buttons[i][j].setBorder(new LineBorder(Color.ORANGE, 1));
 					buttons[i][j].addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
 							for (int i = 0; i < buttons.length; i++) {
