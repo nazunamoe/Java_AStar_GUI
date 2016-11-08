@@ -224,6 +224,70 @@ public class GUI extends JFrame {
 			}
 		}
 		
+		public void movePointer(String location, int x, int y){
+			switch(location){
+			case "Left":
+			{
+				buttons[x-1][y].status = 'n';
+				buttons[x-1][y].setForeground(Color.BLUE);
+				break;
+			}
+			case "Right":
+			{
+				buttons[x+1][y].status = 'n';
+				buttons[x+1][y].setForeground(Color.BLUE);
+				break;
+			}
+			case "Up":
+			{
+				buttons[x][y-1].status = 'n';
+				buttons[x][y-1].setForeground(Color.BLUE);
+				break;
+			}
+			case "Down":
+				buttons[x][y+1].status = 'n';
+				buttons[x][y+1].setForeground(Color.BLUE);
+			{
+				break;
+			}
+			case "LeftUp":
+				buttons[x-1][y-1].status = 'n';
+				buttons[x-1][y-1].setForeground(Color.BLUE);
+			{
+				break;
+			}
+			case "RightUp":
+				buttons[x+1][y-1].status = 'n';
+				buttons[x+1][y-1].setForeground(Color.BLUE);
+			{
+				break;
+			}
+			case "LeftDown":
+			{
+				buttons[x-1][y+1].status = 'n';
+				buttons[x-1][y+1].setForeground(Color.BLUE);
+				break;
+			}
+			case "RightDown":
+			{
+				buttons[x+1][y+1].status = 'n';
+				buttons[x+1][y+1].setForeground(Color.BLUE);
+				break;
+			}
+			}
+		}
+		
+		/*
+		 * 
+		 * 
+		 * 색깔 구분
+		 * 초록색 : 출발점 - status 's'
+		 * 빨간색 : 도착점 - status 'e'
+		 * 파란색 : 탐색중인 점 - status 'n'
+		 * 보라색 : 탐색중인 점 주변에 검색할 점 - status 'a'
+		 * 흰색 : 벽 - status 'w'
+		 */
+		
 		Main ASTAR;
 		public RUI() {
 			setBackground(Color.DARK_GRAY);
@@ -328,19 +392,23 @@ public class GUI extends JFrame {
 								case 2:{
 									boolean start=false;
 									boolean end=false;
+									Button spointer=null;
+									Button epointer=null;
+									Button pointer=null;
 									for (int r = 0; r < buttons.length; r++) {
 										for (int j = 0; j < buttons[0].length; j++) {
 											if(buttons[r][j].status=='s'){
-												start = true;
+												spointer = buttons[r][j];
+												pointer = buttons[r][j];
+												start = true;  // 이곳에서 출발점과 도착점, 현재 지점에 대한 포인터를 저장
 											}
 											if(buttons[r][j].status=='e'){
+												epointer = buttons[r][j];
 												end = true;
 											}
 										}
 									}
 									if(start&&end){
-										// 출발점과 도착점을 검사하여 둘 다 있을 경우에만 작동하도록 구성
-										// 이곳에 탐색 메서드가 들어감
 									}else{
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);
 										break;
@@ -422,6 +490,7 @@ public class GUI extends JFrame {
 			int b = 10;
 			for (int i = 0; i < buttons.length; i++) {
 				for (int j = 0; j < buttons[0].length; j++) {
+					
 					buttons[i][j] = new Button('b');
 					buttons[i][j].setSize(buttons_sizeX, buttons_sizeY);
 					buttons[i][j].setLocation(a, b);
@@ -522,6 +591,11 @@ public class GUI extends JFrame {
 					}
 				}
 				b += buttons_sizeY;
+			}
+			for (int i = 0; i < buttons.length; i++) {
+				for (int j = 0; j < buttons[0].length; j++) {
+					// 각 버튼에 상하 좌우 대각선 방향의 버튼을 객체로 추가하는 메서드,
+				}
 			}
 		}
 	}
