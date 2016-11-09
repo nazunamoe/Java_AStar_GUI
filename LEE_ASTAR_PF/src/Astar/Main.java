@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
+	
+	File F;
+	BufferedWriter buffWrite;
 
 	Point startp;
 
@@ -58,12 +61,17 @@ public class Main {
 	Point END_PNT = null;
 	Point Realtime_NODE = START_PNT;
 	
-	public Main() {getMap();}
+	public Main() {
+		getMap();
+		FileUpdate();
+//		search();
+		}
 	
 	public void getMap() { 
 		try {
-			File F = new File("C:\\astarmap\\MAP.txt"); 														
+			F = new File("C:\\astarmap\\MAP.txt"); 														
 			FileReader TXT = new FileReader(F);
+			BufferedWriter buffWrite = new BufferedWriter(new FileWriter(F)); 
 			int c;
 			String temp = "";
 			ArrayList<String> S = new ArrayList<>();
@@ -80,7 +88,7 @@ public class Main {
 			for (String s : MAP_temp) {
 				System.out.println(s);
 			}
-			TXT.close();
+//			TXT.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -140,14 +148,34 @@ public class Main {
 		System.out.printf("\n");
 	}
 
-	void displaymap() {
+	void displaymap() throws IOException {
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
+				PrintWriter writer = new PrintWriter(F);
+				writer.print("");
+				writer.close();
+			}
+			/*
+			 * 		실시간으로 맵을 수정하고 그걸 gui에서도 실시간으로 분석하는 방식 사용 예정
+			 * 		아무래도 gui에서 이쪽으로 파일을 넘겨주는 방식을 써야할듯함
+			 * 		위 메서드는 맵을 갱신하기 위해 모두 지우는 메서드이고
+			 * 		아래는 맵을 갱신 후 작성하는 부분인데
+			 * 		작동을 안시켜봐서 작동 여부는 모름
+			 */
+		}
+		for (int j = 0; j < MAX_PNT.y; j++) {
+			for (int i = 0; i < MAX_PNT.x; i++) {
+				String text = Character.toString(MAP[i][j]);
+				buffWrite.write(text);
 				System.out.printf("%c ", MAP[i][j]);
 			}
 			System.out.printf("\n");
 		}
 		System.out.printf("\n");
+	}
+	
+	void FileUpdate(){
+		
 	}
 
 	void search() {
