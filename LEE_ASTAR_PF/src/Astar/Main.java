@@ -233,6 +233,11 @@ public class Main{
 			pathData = pathData.parent; // ㅠㅠ 부모노드
 			// 뒤에서 부터 다시 출력
 		}
+		/*
+		 * 이 루프가 한번 돌때 마다 GUI의 메서드에 InterruptedException을 발생시켜 GUI의 맵을 갱신 한뒤
+		 * 다시 루프가 진행되도록 하여야함
+		 * 
+		 */
 	}
 
 	public static void clearScreen() {
