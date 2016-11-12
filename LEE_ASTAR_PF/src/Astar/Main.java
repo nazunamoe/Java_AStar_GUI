@@ -3,8 +3,9 @@ package Astar;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
+import GUI.GUI.status;
 
-public class Main {
+public class Main{
 	
 	File F;
 	BufferedWriter buffWrite;
@@ -62,15 +63,16 @@ public class Main {
 	
 	public Main() {
 		getMap();
-		FileUpdate();
-//		search();
+		genMap();
+		setSTART(2,2);
+		setEND(8,8);
+		search();
 		}
 	
 	public void getMap() { 
 		try {
 			F = new File("C:\\astarmap\\MAP.txt"); 														
 			FileReader TXT = new FileReader(F);
-			BufferedWriter buffWrite = new BufferedWriter(new FileWriter(F)); 
 			int c;
 			String temp = "";
 			ArrayList<String> S = new ArrayList<>();
@@ -144,6 +146,7 @@ public class Main {
 	}
 
 	void Realtimdisplay() {
+		genMap();
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
 				if (i == Realtime_NODE.x && j == Realtime_NODE.y) {
@@ -157,52 +160,31 @@ public class Main {
 		System.out.printf("\n");
 	}
 
-	void displaymap() throws IOException {
-		for (int j = 0; j < MAX_PNT.y; j++) {
-			for (int i = 0; i < MAX_PNT.x; i++) {
-				PrintWriter writer = new PrintWriter(F);
-				writer.print("");
-				writer.close();
-			}
-			/*
-			 * 		실시간으로 맵을 수정하고 그걸 gui에서도 실시간으로 분석하는 방식 사용 예정
-			 * 		아무래도 gui에서 이쪽으로 파일을 넘겨주는 방식을 써야할듯함
-			 * 		위 메서드는 맵을 갱신하기 위해 모두 지우는 메서드이고
-			 * 		아래는 맵을 갱신 후 작성하는 부분인데
-			 * 		작동을 안시켜봐서 작동 여부는 모름
-			 */
-		}
+	void displaymap()  {
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
 				String text = Character.toString(MAP[i][j]);
-				buffWrite.write(text);
 				System.out.printf("%c ", MAP[i][j]);
 			}
 			System.out.printf("\n");
 		}
 		System.out.printf("\n");
 	}
-	
-	void FileUpdate(){
-		
-	}
 
 	void search() {
-
 		// final int[][] directs = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 		final int[][] directs = { { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 },
 				{ 0, -1 } }; // 8 방향 이동
-
 		final MinHeap heap = new MinHeap();
-		heap.add(new Data(START_PNT, 0, 0, null)); 
+		heap.add(new Data(START_PNT, 0, 0, null)); // 시작점 제일 중요 시작점!! 이여!!!
 		Data lastData = null;
 		boolean end = false;
-		while (!end && !heap.isEmpty()) { 
-										
+		while (!end && !heap.isEmpty()) { // 도착 x 힙메모리 비어 있지 않으면 계속 ㄱㄱ // main
+											// loop
 			final Data data = heap.getAndRemoveMin();
 			final Point point = data.point;
 			Realtime_NODE = data.point;
-			for (int i = 0; i < directs.length; i++) { 
+			for (int i = 0; i < directs.length; i++) { // loop 2 발향 검색
 				final Point nextPoint = new Point(point.x + directs[i][0], point.y + directs[i][1]);
 				if (nextPoint.x >= 0 && nextPoint.x < MAX_PNT.x && nextPoint.y >= 0 && nextPoint.y < MAX_PNT.y) {
 					char state = MAP[nextPoint.x][nextPoint.y];
@@ -215,13 +197,14 @@ public class Main {
 					if (state != SPACE) {
 						continue;
 					}
-					if (MAP[nextPoint.x][nextPoint.y] == SPACE) {
+					if (MAP[nextPoint.x][nextPoint.y] == SPACE) { // 방문노드 인식
 						MAP[nextPoint.x][nextPoint.y] = VISITED;
 					}
 					final Data heephaveData = heap.find(nextPoint);
-					if (heephaveData != null) { 
-						if (heephaveData.g > data.g + 1) { 
-							heephaveData.g = data.g + 1; 
+					if (heephaveData != null) { // 열린 목록에 있다면
+						if (heephaveData.g > data.g + 1) { // 그 G 값이 현제 G 갑 보다
+															// 크다면
+							heephaveData.g = data.g + 1; // 바꿈
 							heephaveData.parent = data;
 						}
 					}
@@ -230,27 +213,23 @@ public class Main {
 						Data newData = new Data(nextPoint, data.g + 1, h, data);
 						heap.add(newData);
 					}
-					clearScreen();
+//					clearScreen();					
 					Realtimdisplay();
-
 				} // if ;
-
 			} // for ;
-
 		} // main loop ;
-
 		Data pathData = lastData;
 		while (pathData != null) {
 			Point pnt = pathData.point;
 			if (MAP[pnt.x][pnt.y] == VISITED) {
-			MAP[pnt.x][pnt.y] = ON_PATH;
+				MAP[pnt.x][pnt.y] = ON_PATH;
 				Realtime_NODE = pnt;
 			}
 			pathData = pathData.parent; // ㅠㅠ 부모노드
-
 			// 뒤에서 부터 다시 출력
 		}
 	}
+
 
 	public static void clearScreen() {
 		for (int i = 0; i < 120; i++)

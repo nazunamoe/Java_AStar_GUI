@@ -25,9 +25,55 @@ import java.io.IOException;
 
 public class GUI extends JFrame {
 
+	static int row=10;
+	static int column=10;
+	static int Mode;
+	static Button buttons[][] = new Button[row][column];
+	
+	public void genMap(char[][] map){
+		for(int i=0; i<map.length; i++){
+			for(int j=0; i<map[0].length; i++){
+				char pointer = map[i][j];
+				switch(pointer){
+//				final char START = 'S';
+//				final char END = 'E';
+//				final char SPACE = '.';
+//				final char WALL = 'W';
+//				final char VISITED = '-';
+//				final char ON_PATH = '@';
+//				final char NAW_NODE = '@';
+				case 'S':{
+					buttons[i][j].setForeground(Color.green);
+					break;
+				}
+				case 'E':{
+					buttons[i][j].setForeground(Color.red);
+					break;
+				}
+				case '.':{
+					buttons[i][j].setForeground(Color.DARK_GRAY);
+					break;
+				}
+				case 'W':{
+					buttons[i][j].setForeground(Color.white);
+					break;
+				}
+				case '-':{
+					buttons[i][j].setForeground(Color.ORANGE);
+					break;
+				}
+				case '@':{
+					buttons[i][j].setForeground(Color.magenta);
+					break;
+				}
+				}
+			}
+		}
+	}
+	
 	static Main ASTAR;
-
-	GUI(Main ASTAR) {
+	
+	public GUI() {
 		Font main = new Font("¸¼Àº °íµñ",0,30);
 		Font sub = new Font("¸¼Àº °íµñ",0,15);
 		Image img = null;
@@ -70,11 +116,9 @@ public class GUI extends JFrame {
 	}
 	
 	public static class status extends Panel{
+		Main ASTAR = new Main();
 		public JFileChooser jfc = new JFileChooser();
-		static int row=10;
-		static int column=10;
-		static int Mode;
-		static Button buttons[][] = new Button[row][column];
+		
 		static File text;
 		Main main = new Main();
 		
@@ -93,6 +137,8 @@ public class GUI extends JFrame {
 				}
 			}
 		}
+		
+
 		
 	}
 
@@ -270,7 +316,7 @@ public class GUI extends JFrame {
 											for(int y=0; y<line.length(); y++){
 					                        pointer = line.charAt(y);
 					                        Map[pointerx][pointery] = pointer;
-					                        if(pointer == '0' ||pointer == 'E' ||pointer == 'S'||pointer == 'B'){
+					                        if(pointer == '0' ||pointer == 'E' ||pointer == 'S'||pointer == 'W'){
 					                        	if(pointer == '\n'){
 					                        		pointerx = 0;
 					                        		pointery++;
@@ -314,7 +360,7 @@ public class GUI extends JFrame {
 					                        		buttons[pointerx][pointery].status='e';
 					                        		end = true;}
 					                        	}
-					                        	else if(pointer == 'B'){
+					                        	else if(pointer == 'W'){
 					                        		buttons[pointerx][pointery].setBackground(Color.WHITE);
 					                        		buttons[pointerx][pointery].block=true;
 					                        		buttons[pointerx][pointery].status='w';
