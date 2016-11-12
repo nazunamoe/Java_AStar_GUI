@@ -19,8 +19,10 @@ public class Main{
 	final char VISITED = '-';
 	final char ON_PATH = '@';
 	final char NAW_NODE = '@';
-	final int speed = 40; // 탐색스피드
-
+	final int speed = 0; // 탐색스피드
+	public boolean end;
+	public boolean refresh;
+	
 	String[] map = { "....................", // 1
 			"...WWWW.............", // 2
 			"......W.............", // 3
@@ -45,7 +47,7 @@ public class Main{
 			"...W.............E.."// 10
 	};
 
-	char[][] MAP;
+	public char[][] MAP;
 
 	String[] MAP_temp; // TXT 파일 받는 놈
 
@@ -62,11 +64,7 @@ public class Main{
 	Point Realtime_NODE = START_PNT;
 	
 	public Main() {
-		getMap();
-		genMap();
-		setSTART(2,2);
-		setEND(8,8);
-		search();
+		
 		}
 	
 	public void getMap() { 
@@ -96,7 +94,6 @@ public class Main{
 	}
 
 	public void setEND(int x, int y) {
-		System.out.println("도착지 입력");
 		int Ex = x;
 		int Ey = y;
 		MAP[Ex][Ey] = END;
@@ -104,7 +101,6 @@ public class Main{
 	}
 
 	public void setSTART(int x, int y) {
-		System.out.println("출발지 입력: ");
 		int Sx = x;
 		int Sy = y;
 		MAP[Sx][Sy] = START;
@@ -137,20 +133,28 @@ public class Main{
 	
 	public char[][] genMap(char[][] MAP) {
 		int idx = 0;
-
 		MAX_PNT = new Point(MAP.length, MAP[0].length); // 맵크기 인식 시켜 줘야함
 		this.MAP = MAP;
-
+		for (int j = 0; j < MAX_PNT.y; j++) {
+			for (int i = 0; i < MAX_PNT.x; i++) {
+				if(MAP[i][j]=='S'){
+					setSTART(i,j);
+				}
+				if(MAP[i][j]=='E'){
+					setEND(i,j);
+				}
+			}
+		}
 		return MAP;
-
 	}
-
 	void Realtimdisplay() {
-		genMap();
+		genMap(MAP);
+		
+		refresh = true;
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
 				if (i == Realtime_NODE.x && j == Realtime_NODE.y) {
-					System.out.printf("%c ", NAW_NODE);
+					System.out.printf("@ ");
 				} else {
 					System.out.printf("%c ", MAP[i][j]);
 				}
@@ -158,7 +162,7 @@ public class Main{
 			System.out.printf("\n");
 		}
 		System.out.printf("\n");
-	}
+	refresh = false;}
 
 	void displaymap()  {
 		for (int j = 0; j < MAX_PNT.y; j++) {
@@ -171,21 +175,22 @@ public class Main{
 		System.out.printf("\n");
 	}
 
-	void search() {
+	public void search() {
 		// final int[][] directs = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
 		final int[][] directs = { { 1, 0 }, { 1, 1 }, { 0, 1 }, { -1, 1 }, { -1, 0 }, { -1, -1 }, { 1, -1 },
 				{ 0, -1 } }; // 8 방향 이동
 		final MinHeap heap = new MinHeap();
-		heap.add(new Data(START_PNT, 0, 0, null)); // 시작점 제일 중요 시작점!! 이여!!!
+		heap.add(new Data(START_PNT, 0, 0, null));
 		Data lastData = null;
-		boolean end = false;
-		while (!end && !heap.isEmpty()) { // 도착 x 힙메모리 비어 있지 않으면 계속 ㄱㄱ // main
-											// loop
+		end = false;
+		while (!end && !heap.isEmpty()) { 
+
 			final Data data = heap.getAndRemoveMin();
 			final Point point = data.point;
 			Realtime_NODE = data.point;
 			for (int i = 0; i < directs.length; i++) { // loop 2 발향 검색
 				final Point nextPoint = new Point(point.x + directs[i][0], point.y + directs[i][1]);
+				System.out.println(nextPoint.x+" , "+nextPoint.y);
 				if (nextPoint.x >= 0 && nextPoint.x < MAX_PNT.x && nextPoint.y >= 0 && nextPoint.y < MAX_PNT.y) {
 					char state = MAP[nextPoint.x][nextPoint.y];
 					if (state == END) {
@@ -229,7 +234,6 @@ public class Main{
 			// 뒤에서 부터 다시 출력
 		}
 	}
-
 
 	public static void clearScreen() {
 		for (int i = 0; i < 120; i++)

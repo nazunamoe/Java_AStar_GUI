@@ -30,6 +30,8 @@ public class GUI extends JFrame {
 	static int Mode;
 	static Button buttons[][] = new Button[row][column];
 	
+	
+	
 	public void genMap(char[][] map){
 		for(int i=0; i<map.length; i++){
 			for(int j=0; i<map[0].length; i++){
@@ -248,6 +250,14 @@ public class GUI extends JFrame {
 	}
 
 	public class RUI extends status {
+		
+		public char[][] Map = new char[row][column];
+			public void search(){
+				while(main.end == false){
+				main.genMap(Map);
+				main.search();
+				}
+			}
 	
 		public void MapClean(){
 			text = null;
@@ -273,7 +283,6 @@ public class GUI extends JFrame {
 		
 		Main ASTAR;
 		public RUI() {
-			char[][] Map = new char[row][column];
 			setBackground(Color.DARK_GRAY);
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
 			Container M = getContentPane();
@@ -287,6 +296,7 @@ public class GUI extends JFrame {
 				buttons_BUI[i].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent a) {
 						for (int i = 0; i < buttons_BUI.length; i++) {
+							
 							if (a.getSource() == buttons_BUI[i]) {
 								Mode = 0;
 								switch(i){
@@ -316,14 +326,14 @@ public class GUI extends JFrame {
 											for(int y=0; y<line.length(); y++){
 					                        pointer = line.charAt(y);
 					                        Map[pointerx][pointery] = pointer;
-					                        if(pointer == '0' ||pointer == 'E' ||pointer == 'S'||pointer == 'W'){
+					                        if(pointer == '.' ||pointer == 'E' ||pointer == 'S'||pointer == 'W'){
 					                        	if(pointer == '\n'){
 					                        		pointerx = 0;
 					                        		pointery++;
 					                        		continue;
 					                        	}
 					                        	System.out.println(pointer);
-					                        	if(pointer == '0'){
+					                        	if(pointer == '.'){
 					                        		buttons[pointerx][pointery].setBackground(Color.DARK_GRAY);
 					                        		buttons[pointerx][pointery].block=false;
 					                        		buttons[pointerx][pointery].status='b';
@@ -393,8 +403,7 @@ public class GUI extends JFrame {
 										}
 									}
 									if(start&&end){
-										// 출발점과 도착점을 검사하여 둘 다 있을 경우에만 작동하도록 구성
-										// 이곳에 탐색 메서드가 들어감
+											search();
 									}else{
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);
 										break;
