@@ -15,7 +15,6 @@ public class Main {
 	final char VISITED = '-';
 	final char ON_PATH = '@';
 	final char NAW_NODE = '@';
-
 	final int speed = 40; // 탐색스피드
 
 	String[] map = { "....................", // 1
@@ -109,7 +108,7 @@ public class Main {
 
 	public char[][] genMap() {
 		int idx = 0;
-		char[][] MAP = new char[MAP_temp[0].length()][MAP_temp.length];
+		 MAP = new char[MAP_temp[0].length()][MAP_temp.length];
 
 		for (String s : MAP_temp) {
 			char[] cs = s.replace(" ", "").toCharArray();
@@ -118,6 +117,16 @@ public class Main {
 			}
 			idx++;
 		}
+
+		MAX_PNT = new Point(MAP.length, MAP[0].length); // 맵크기 인식 시켜 줘야함
+		this.MAP = MAP;
+
+		return MAP;
+
+	}
+	
+	public char[][] genMap(char[][] MAP) {
+		int idx = 0;
 
 		MAX_PNT = new Point(MAP.length, MAP[0].length); // 맵크기 인식 시켜 줘야함
 		this.MAP = MAP;

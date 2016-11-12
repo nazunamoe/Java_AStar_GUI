@@ -14,7 +14,7 @@ import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
-import Astar.*;
+import Astar.Main;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.BufferedReader;
@@ -71,12 +71,12 @@ public class GUI extends JFrame {
 	
 	public static class status extends Panel{
 		public JFileChooser jfc = new JFileChooser();
-		static int row=20;
-		static int column=20;
+		static int row=10;
+		static int column=10;
 		static int Mode;
 		static Button buttons[][] = new Button[row][column];
 		static File text;
-		
+		Main main = new Main();
 		
 		public void MapDisable(){
 			for (int r = 0; r < buttons.length; r++) {
@@ -99,6 +99,7 @@ public class GUI extends JFrame {
 	public class BGR extends status {
 		Main ASTAR;
 		public BGR() {
+			
 			Font sub = new Font("¸¼Àº °íµñ",Font.BOLD,12);
 			setBackground(null);		
 			Container M = getContentPane();			
@@ -226,6 +227,7 @@ public class GUI extends JFrame {
 		
 		Main ASTAR;
 		public RUI() {
+			char[][] Map = new char[row][column];
 			setBackground(Color.DARK_GRAY);
 			Font sub = new Font("¸¼Àº °íµñ",Font.BOLD,12);
 			Container M = getContentPane();
@@ -253,6 +255,8 @@ public class GUI extends JFrame {
 										break;
 								}
 								case 1:{
+									FileReader fr = null;
+									BufferedReader br = null;						
 									boolean start = false;
 									boolean end = false;
 									String line = "";
@@ -260,10 +264,12 @@ public class GUI extends JFrame {
 									int pointery = 0;
 									char pointer;
 									try {
-										BufferedReader br = new BufferedReader(new FileReader(text));
+										fr = new FileReader(text);
+										br = new BufferedReader(fr);
 										while((line = br.readLine()) != null) {
 											for(int y=0; y<line.length(); y++){
 					                        pointer = line.charAt(y);
+					                        Map[pointerx][pointery] = pointer;
 					                        if(pointer == '0' ||pointer == 'E' ||pointer == 'S'||pointer == 'B'){
 					                        	if(pointer == '\n'){
 					                        		pointerx = 0;
@@ -323,6 +329,8 @@ public class GUI extends JFrame {
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
+									
+									main.genMap(Map);
 									break;
 								}
 								case 2:{
@@ -408,6 +416,7 @@ public class GUI extends JFrame {
 	public class showmap extends status {
 		Main ASTAR;
 		public showmap() {
+			
 			Container M = getContentPane();
 			setLayout(null);
 			final int sizeX = (int) ((M.getSize().height) * (0.8));
