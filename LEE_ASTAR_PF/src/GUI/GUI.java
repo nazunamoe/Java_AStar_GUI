@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class GUI extends JFrame implements Runnable{
+public class GUI extends JFrame{
 
 	static int rowdata;
 	static int columndata;
@@ -64,9 +64,7 @@ public class GUI extends JFrame implements Runnable{
 		}
 	}
 	
-	public void run() {
-		this.refresh(Map);
-	}
+	
 
 	static Main ASTAR;
 	
@@ -138,9 +136,6 @@ public class GUI extends JFrame implements Runnable{
 				}
 			}
 		}
-		
-
-		
 	}
 
 	public class BGR extends status {
@@ -313,17 +308,12 @@ public class GUI extends JFrame implements Runnable{
 										while((line = br.readLine()) != null) {
 											for(int y=0; y<line.length(); y++){
 					                        pointer = line.charAt(y);
-					                        Map[pointerx][pointery] = pointer;
 					                        if(pointer == '.' ||pointer == 'E' ||pointer == 'S'||pointer == 'W'){
-					                        	if(pointer == '\n'){
-					                        		pointerx = 0;
-					                        		pointery++;
-					                        		continue;
-					                        	}
 					                        	if(pointer == '.'){
-					                        		buttons[pointerx][pointery].setBackground(Color.DARK_GRAY);
-					                        		buttons[pointerx][pointery].block=false;
-					                        		buttons[pointerx][pointery].status='b';
+					                        		buttons[pointery][pointerx].setBackground(Color.DARK_GRAY);
+					                        		buttons[pointery][pointerx].block=false;
+					                        		buttons[pointery][pointerx].status='b';
+					                        		Map[pointerx][pointery] = '.';
 					                        	}
 					                        	else if(pointer == 'S'){
 					                        		if(start){
@@ -334,9 +324,10 @@ public class GUI extends JFrame implements Runnable{
 					                        			buttons_BUI[1].setEnabled(true);
 					                        			break;
 					                        		}else{
-					                        		buttons[pointerx][pointery].setBackground(Color.GREEN);
-					                        		buttons[pointerx][pointery].block=true;
-					                        		buttons[pointerx][pointery].status='s';
+					                        		buttons[pointery][pointerx].setBackground(Color.GREEN);
+					                        		buttons[pointery][pointerx].block=true;
+					                        		buttons[pointery][pointerx].status='s';
+					                        		Map[pointerx][pointery] = 'S';
 					                        		start = true;}
 					                        	}
 					                        	else if(pointer == 'E'){
@@ -348,15 +339,17 @@ public class GUI extends JFrame implements Runnable{
 					                        			buttons_BUI[1].setEnabled(true);
 					                        			break;
 					                        		}else{
-					                        		buttons[pointerx][pointery].setBackground(Color.RED);
-					                        		buttons[pointerx][pointery].block=true;
-					                        		buttons[pointerx][pointery].status='e';
+					                        			buttons[pointery][pointerx].setBackground(Color.RED);
+					                        			buttons[pointery][pointerx].block=true;
+					                        			buttons[pointery][pointerx].status='e';
+					                        			Map[pointerx][pointery] = 'E';
 					                        		end = true;}
 					                        	}
 					                        	else if(pointer == 'W'){
-					                        		buttons[pointerx][pointery].setBackground(Color.WHITE);
-					                        		buttons[pointerx][pointery].block=true;
-					                        		buttons[pointerx][pointery].status='w';
+					                        		buttons[pointery][pointerx].setBackground(Color.WHITE);
+					                        		buttons[pointery][pointerx].block=true;
+					                        		buttons[pointery][pointerx].status='w';
+					                        		Map[pointerx][pointery] = 'W';
 					                        	}
 					                        	pointerx++;
 					                        }else{
@@ -456,6 +449,7 @@ public class GUI extends JFrame implements Runnable{
 					buttons[i][j].setBorder(new LineBorder(Color.ORANGE, 1));
 					buttons[i][j].addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
+							main.genMap(Map);
 							for (int i = 0; i < buttons.length; i++) {
 								for (int j = 0; j < buttons[0].length; j++) {
 									if (e.getSource() == buttons[i][j]) {
@@ -474,6 +468,7 @@ public class GUI extends JFrame implements Runnable{
 															buttons[i][j].status = 'b';
 															buttons[i][j].block = false;
 															buttons[i][j].setBackground(Color.DARK_GRAY);
+															main.MAP[i][j] = '.';
 														}else if(buttons[i][j].block){
 															System.out.println("중복 설정 불가능. 해제후 재시도");
 															break;
@@ -484,7 +479,8 @@ public class GUI extends JFrame implements Runnable{
 											}if(blocked == 0){
 											buttons[i][j].status = 's';
 											buttons[i][j].setBackground(Color.green);
-											buttons[i][j].block = true;}
+											buttons[i][j].block = true;
+											main.MAP[i][j] = 'S';}
 											break;
 										}
 										case 2:{
@@ -500,6 +496,7 @@ public class GUI extends JFrame implements Runnable{
 																buttons[i][j].status = 'b';
 																buttons[i][j].setBackground(Color.DARK_GRAY);
 																buttons[i][j].block = false;
+																main.MAP[i][j] = '.';
 															}else if(buttons[i][j].block){
 																System.out.println("중복 설정 불가능. 해제후 재시도");
 																break;
@@ -511,7 +508,8 @@ public class GUI extends JFrame implements Runnable{
 											if(blocked == 0){
 												buttons[i][j].status = 'e';
 												buttons[i][j].setBackground(Color.red);
-												buttons[i][j].block = true;}
+												buttons[i][j].block = true;
+												main.MAP[i][j] = 'E';}
 											break;
 										}
 										case 3:{
@@ -522,6 +520,7 @@ public class GUI extends JFrame implements Runnable{
 																blocked = 1;
 																buttons[i][j].status = 'b';
 																buttons[i][j].setBackground(Color.DARK_GRAY);
+																main.MAP[i][j] = '.';
 																break;															
 														}
 													}
@@ -530,7 +529,8 @@ public class GUI extends JFrame implements Runnable{
 											if(blocked == 0){
 												buttons[i][j].status = 'w';
 												buttons[i][j].setBackground(Color.white);
-												buttons[i][j].block = true;}
+												buttons[i][j].block = true;
+												main.MAP[i][j] = 'W';}
 											break;
 										}
 										case 0:{}
@@ -553,6 +553,5 @@ public class GUI extends JFrame implements Runnable{
 		}
 	}
 
-	@Override
-	
+
 }

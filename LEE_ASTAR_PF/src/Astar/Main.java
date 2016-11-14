@@ -147,6 +147,7 @@ public class Main extends Thread{
 		return MAP;
 	}
 	void Realtimdisplay() {
+		
 		genMap(MAP);
 		
 		refresh = true;
