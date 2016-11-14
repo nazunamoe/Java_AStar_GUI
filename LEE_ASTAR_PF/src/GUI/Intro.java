@@ -21,7 +21,7 @@ public class Intro extends JFrame {
 	Intro(){
 		Font main = new Font("¸¼Àº °íµñ",0,30);
 		Font sub = new Font("¸¼Àº °íµñ",0,15);
-		setSize(300, 200);
+		setSize(300, 100);
 		setVisible(true);
 		Container c = getContentPane();
 		c.setBackground(Color.DARK_GRAY);
@@ -35,13 +35,25 @@ public class Intro extends JFrame {
 		Exit.setFont(sub);
 		
 		Open.setSize(100,50);
-		Open.setLocation(30,60);
+		Open.setLocation(30,10);
 		
 		Exit.setSize(100,50);
-		Exit.setLocation(150,60);
+		Exit.setLocation(160,10);
+		
+		Exit.setBorderPainted(false);
+		Exit.setFocusPainted(false);
+		Exit.setContentAreaFilled(false);
+		Exit.setForeground(Color.ORANGE);
+		
+		Open.setBorderPainted(false);
+		Open.setFocusPainted(false);
+		Open.setContentAreaFilled(false);
+		Open.setForeground(Color.ORANGE);
 		
 		c.add(Open);
 		c.add(Exit);
+		
+		setResizable(false);
 		
 		Open.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
@@ -69,11 +81,9 @@ public class Intro extends JFrame {
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
+						dispose();
 						c.setVisible(false);
-						c.setVisible(false);
-						c.setVisible(false);
-						
-						new GUI(temprow/10,tempcolumn, f);
+						new GUI(temprow/tempcolumn,tempcolumn, f);
 						}
 					else{
 						

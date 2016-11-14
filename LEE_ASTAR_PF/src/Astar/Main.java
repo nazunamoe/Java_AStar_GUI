@@ -2,10 +2,9 @@ package Astar;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Scanner;
-import GUI.GUI.status;
+import GUI.GUI;
 
-public class Main{
+public class Main extends Thread{
 	
 	File F;
 	BufferedWriter buffWrite;
@@ -190,7 +189,7 @@ public class Main{
 			Realtime_NODE = data.point;
 			for (int i = 0; i < directs.length; i++) { // loop 2 발향 검색
 				final Point nextPoint = new Point(point.x + directs[i][0], point.y + directs[i][1]);
-				System.out.println(nextPoint.x+" , "+nextPoint.y);
+//				System.out.println(nextPoint.x+" , "+nextPoint.y);
 				if (nextPoint.x >= 0 && nextPoint.x < MAX_PNT.x && nextPoint.y >= 0 && nextPoint.y < MAX_PNT.y) {
 					char state = MAP[nextPoint.x][nextPoint.y];
 					if (state == END) {
@@ -218,7 +217,16 @@ public class Main{
 						Data newData = new Data(nextPoint, data.g + 1, h, data);
 						heap.add(newData);
 					}
-//					clearScreen();					
+					try {
+						sleep(350);
+						// 속도 조절 
+					} catch (InterruptedException e) {
+					}
+//					clearScreen();	
+					if(end){
+						this.interrupt();
+						
+					}
 					Realtimdisplay();
 				} // if ;
 			} // for ;
@@ -233,11 +241,6 @@ public class Main{
 			pathData = pathData.parent; // ㅠㅠ 부모노드
 			// 뒤에서 부터 다시 출력
 		}
-		/*
-		 * 이 루프가 한번 돌때 마다 GUI의 메서드에 InterruptedException을 발생시켜 GUI의 맵을 갱신 한뒤
-		 * 다시 루프가 진행되도록 하여야함
-		 * 
-		 */
 	}
 
 	public static void clearScreen() {

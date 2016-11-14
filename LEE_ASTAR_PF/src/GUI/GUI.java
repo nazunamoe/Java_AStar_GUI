@@ -11,38 +11,30 @@ import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import Astar.Main;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class GUI extends JFrame {
+public class GUI extends JFrame implements Runnable{
 
 	static int rowdata;
 	static int columndata;
 	static Button buttons[][]= new Button[rowdata][columndata];
 	static int Mode;
 	static File textfile;
+	Thread autoRefresh;
+	 
 	
-	public void genMap(char[][] map){
+	public void refresh(char[][] map){
 		for(int i=0; i<map.length; i++){
-			for(int j=0; i<map[0].length; i++){
+			for(int j=0; j<map[0].length; j++){
 				char pointer = map[i][j];
 				switch(pointer){
-//				final char START = 'S';
-//				final char END = 'E';
-//				final char SPACE = '.';
-//				final char WALL = 'W';
-//				final char VISITED = '-';
-//				final char ON_PATH = '@';
-//				final char NAW_NODE = '@';
 				case 'S':{
 					buttons[i][j].setForeground(Color.green);
 					break;
@@ -72,20 +64,23 @@ public class GUI extends JFrame {
 		}
 	}
 	
+	public void run() {
+		this.refresh(Map);
+	}
+
 	static Main ASTAR;
 	
 	public GUI(int row, int column, File text) {
 		Font main = new Font("맑은 고딕",0,30);
 		Font sub = new Font("맑은 고딕",0,15);
 		Image img = null;
-		
 		try {
 			File sourceimage = new File("src/overwatch.png");
 			img = ImageIO.read(sourceimage);
 		} catch (IOException e) {
 			System.out.println("이미지파일이 없습니다.");
 		}
-		
+	
 		JLabel logo = new JLabel(new ImageIcon(img));
 		textfile = text;
 		rowdata = row;
@@ -392,7 +387,7 @@ public class GUI extends JFrame {
 										}
 									}
 									if(start&&end){
-											search();
+										search();
 									}else{
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);
 										break;
@@ -557,4 +552,7 @@ public class GUI extends JFrame {
 			}
 		}
 	}
+
+	@Override
+	
 }

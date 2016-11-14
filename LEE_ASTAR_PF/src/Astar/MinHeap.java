@@ -15,7 +15,7 @@ public class MinHeap {
 
 		Data head = queue.get(0);
 		
-		System.out.println(" 현제 포인트 "+head.point.x+","+head.point.y); // 디버그 
+//		System.out.println(" 현제 포인트 "+head.point.x+","+head.point.y); // 디버그 
 		
 		Data last = queue.get(endPnt - 1);
 		queue.set(0, last);
@@ -46,7 +46,7 @@ public class MinHeap {
 
 	public boolean isEmpty() {
 		
-		System.out.println(" heep 용량 " + endPnt);  // 다버그
+//		System.out.println(" heep 용량 " + endPnt);  // 다버그
 		return endPnt <= 0;
 	}
 
