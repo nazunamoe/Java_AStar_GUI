@@ -25,12 +25,11 @@ import java.io.IOException;
 
 public class GUI extends JFrame {
 
-	static int row=10;
-	static int column=10;
+	static int rowdata;
+	static int columndata;
+	static Button buttons[][]= new Button[rowdata][columndata];
 	static int Mode;
-	static Button buttons[][] = new Button[row][column];
-	
-	
+	static File textfile;
 	
 	public void genMap(char[][] map){
 		for(int i=0; i<map.length; i++){
@@ -75,7 +74,7 @@ public class GUI extends JFrame {
 	
 	static Main ASTAR;
 	
-	public GUI() {
+	public GUI(int row, int column, File text) {
 		Font main = new Font("맑은 고딕",0,30);
 		Font sub = new Font("맑은 고딕",0,15);
 		Image img = null;
@@ -88,7 +87,9 @@ public class GUI extends JFrame {
 		}
 		
 		JLabel logo = new JLabel(new ImageIcon(img));
-		
+		textfile = text;
+		rowdata = row;
+		columndata = column;
 		
 		setTitle("A-STAR Algorithm");
 		setSize(500, 500);
@@ -97,11 +98,11 @@ public class GUI extends JFrame {
 
 		c.setBackground(Color.DARK_GRAY);
 		setLayout(null);
-		add(new BGR());
 		add(new showmap());
-
+		add(new BGR());
 		add(new RUI());
 		
+
 		JLabel Title = new JLabel("A Star Algorithm");
 		Title.setLocation(10,430);
 		Title.setSize(300,40);
@@ -120,6 +121,9 @@ public class GUI extends JFrame {
 	public static class status extends Panel{
 		Main ASTAR = new Main();
 		public JFileChooser jfc = new JFileChooser();
+		
+		static Button buttons[][] = new Button[rowdata][columndata];
+		static char[][] Map = new char[rowdata][columndata];
 		
 		static File text;
 		Main main = new Main();
@@ -251,7 +255,7 @@ public class GUI extends JFrame {
 
 	public class RUI extends status {
 		
-		public char[][] Map = new char[row][column];
+		public char[][] Map = new char[rowdata][columndata];
 			public void search(){
 				while(main.end == false){
 				main.genMap(Map);
@@ -282,7 +286,7 @@ public class GUI extends JFrame {
 		}
 		
 		Main ASTAR;
-		public RUI() {
+		public RUI()  {
 			setBackground(Color.DARK_GRAY);
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
 			Container M = getContentPane();
@@ -290,27 +294,16 @@ public class GUI extends JFrame {
 			setSize((int) ((M.getSize().height) * (0.2))+6, (int) ((M.getSize().width) * (0.6)-30));
 			setLocation((int) ((M.getSize().height) * (0.84)), 10);
 			setLayout(new GridLayout(6, 1, 0, 15));
-			JButton buttons_BUI[] = new JButton[6];
+			JButton buttons_BUI[] = new JButton[4];
 			for (int i = 0; i < buttons_BUI.length; i++) {
 				buttons_BUI[i] = new JButton("매뉴" + (i + 1));
 				buttons_BUI[i].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent a) {
 						for (int i = 0; i < buttons_BUI.length; i++) {
-							
 							if (a.getSource() == buttons_BUI[i]) {
 								Mode = 0;
 								switch(i){
 								case 0:{
-					                jfc.setFileFilter(new FileNameExtensionFilter("txt", "txt"));
-									 if(jfc.showOpenDialog(M) == JFileChooser.APPROVE_OPTION){
-										text=jfc.getSelectedFile();
-									 	buttons_BUI[0].setEnabled(false); // 한번에 여러 파일 불러오기는 불가능하도록 설정함
-									 	buttons_BUI[1].setEnabled(true);
-										buttons_BUI[2].setEnabled(true);
-										buttons_BUI[3].setEnabled(true);}
-										break;
-								}
-								case 1:{
 									FileReader fr = null;
 									BufferedReader br = null;						
 									boolean start = false;
@@ -320,7 +313,7 @@ public class GUI extends JFrame {
 									int pointery = 0;
 									char pointer;
 									try {
-										fr = new FileReader(text);
+										fr = new FileReader(textfile);
 										br = new BufferedReader(fr);
 										while((line = br.readLine()) != null) {
 											for(int y=0; y<line.length(); y++){
@@ -332,7 +325,6 @@ public class GUI extends JFrame {
 					                        		pointery++;
 					                        		continue;
 					                        	}
-					                        	System.out.println(pointer);
 					                        	if(pointer == '.'){
 					                        		buttons[pointerx][pointery].setBackground(Color.DARK_GRAY);
 					                        		buttons[pointerx][pointery].block=false;
@@ -343,10 +335,8 @@ public class GUI extends JFrame {
 					                        			JOptionPane.showMessageDialog(M, "출발점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
 					                        			br.close();
 					                        			MapClean();
-					                        			buttons_BUI[0].setEnabled(true);
-					                        			buttons_BUI[1].setEnabled(false);
-					                        			buttons_BUI[2].setEnabled(false);
-					                        			buttons_BUI[3].setEnabled(false);
+					                        			buttons_BUI[0].setEnabled(false);
+					                        			buttons_BUI[1].setEnabled(true);
 					                        			break;
 					                        		}else{
 					                        		buttons[pointerx][pointery].setBackground(Color.GREEN);
@@ -359,10 +349,8 @@ public class GUI extends JFrame {
 					                        			JOptionPane.showMessageDialog(M, "도착점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
 					                        			br.close();
 					                        			MapClean();
-					                        			buttons_BUI[0].setEnabled(true);
-					                        			buttons_BUI[1].setEnabled(false);
-					                        			buttons_BUI[2].setEnabled(false);
-					                        			buttons_BUI[3].setEnabled(false);
+					                        			buttons_BUI[0].setEnabled(false);
+					                        			buttons_BUI[1].setEnabled(true);
 					                        			break;
 					                        		}else{
 					                        		buttons[pointerx][pointery].setBackground(Color.RED);
@@ -385,11 +373,12 @@ public class GUI extends JFrame {
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
-									
 									main.genMap(Map);
+									buttons_BUI[0].setEnabled(false);
+                        			buttons_BUI[1].setEnabled(true);
 									break;
 								}
-								case 2:{
+								case 1:{
 									boolean start=false;
 									boolean end=false;
 									for (int r = 0; r < buttons.length; r++) {
@@ -411,29 +400,12 @@ public class GUI extends JFrame {
 									}
 									break;
 								}
-								case 3:{
-									BufferedReader br;
-									try {
-										br = new BufferedReader(new FileReader(text));
-										br.close();
-										MapClean();
-										buttons_BUI[0].setEnabled(true);
-										buttons_BUI[1].setEnabled(false);
-										buttons_BUI[2].setEnabled(false);
-										buttons_BUI[3].setEnabled(false);
-									} catch (FileNotFoundException e) {
-										e.printStackTrace();
-									} catch (IOException e) {
-										e.printStackTrace();
-									}
-									break;
-								}
-								case 4:{
+								case 2:{
 									JOptionPane.showMessageDialog(M, "경상대학교 자료구조 및 알고리즘 TA \n\n 알고리즘 구현 : 이영섭 \n GUI 제작 : 지평강 ",
 											"제작자 정보",JOptionPane.INFORMATION_MESSAGE);
 									break;
 								}
-								case 5:{
+								case 3:{
 									int result = 0;
 									result = JOptionPane.showConfirmDialog(M, "프로그램을 종료하시겠습니까?","종료",JOptionPane.INFORMATION_MESSAGE);
 									if(result == JOptionPane.CANCEL_OPTION||result == JOptionPane.CLOSED_OPTION){
@@ -449,16 +421,12 @@ public class GUI extends JFrame {
 				buttons_BUI[i].setBackground(Color.GRAY);
 				add(buttons_BUI[i]);
 			}
-			buttons_BUI[0].setText("맵 가져오기");
-			buttons_BUI[1].setText("맵 분석");
-			buttons_BUI[2].setText("탐색 시작");
-			buttons_BUI[3].setText("맵 닫기");
-			buttons_BUI[4].setText("정보");
-			buttons_BUI[5].setText("종료");
+			buttons_BUI[0].setText("맵 분석");
+			buttons_BUI[1].setText("탐색 시작");
+			buttons_BUI[2].setText("정보");
+			buttons_BUI[3].setText("종료");
 			buttons_BUI[1].setEnabled(false);
-			buttons_BUI[2].setEnabled(false);
-			buttons_BUI[3].setEnabled(false);
-			for(int i=0; i<=5; i++){
+			for(int i=0; i<=3; i++){
 				buttons_BUI[i].setBorderPainted(false);
 				buttons_BUI[i].setFocusPainted(false);
 				buttons_BUI[i].setContentAreaFilled(false);
