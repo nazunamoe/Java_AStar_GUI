@@ -65,7 +65,7 @@ public class GUI extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	public static class status extends Panel implements Runnable{ // 모든 패널이 상속하는 클래스, 공유해야 할 데이터를 보존
+	public static class status extends Panel{ // 모든 패널이 상속하는 클래스, 공유해야 할 데이터를 보존
 		
 		static Button buttons[][] = new Button[rowdata][columndata];
 		static char[][] Map = new char[rowdata][columndata];
@@ -78,27 +78,10 @@ public class GUI extends JFrame{
 		static File text;
 		Main main = new Main();
 		
-		
-		
 		public void search(){
-			Runnable r = new status();
-			Thread t = new Thread(r);
-			t.start();
 			main.search();
-			refresh(main.MAP);
+			refresh(main.Result);
 			completed = true;
-		}
-		
-		public void run(){
-			System.out.println("not");
-			if(main.isInterrupted()){
-				System.out.println("Interrupted");
-			refresh(main.MAP);
-			main.notify();}
-		}
-		
-		public void refreshAuto(){
-			refresh(main.MAP);
 		}
 		
 		public void refresh(char[][] map){ // char맵을 받아서 button을 갱신

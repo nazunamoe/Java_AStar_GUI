@@ -115,7 +115,7 @@ public class Main extends Thread{
 	public char[][] genMap() {
 		int idx = 0;
 		 MAP = new char[MAP_temp[0].length()][MAP_temp.length];
-
+		 Result = MAP;
 		for (String s : MAP_temp) {
 			char[] cs = s.replace(" ", "").toCharArray();
 			for (int i = 0; i < cs.length; i++) {
@@ -150,13 +150,15 @@ public class Main extends Thread{
 	void Realtimdisplay() {
 		
 		genMap(MAP);
-		
+		Result = MAP;
 		refresh = true;
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
 				if (i == Realtime_NODE.x && j == Realtime_NODE.y) {
+					Result[i][j] = '@';
 					System.out.printf("@ ");
 				} else {
+					Result[i][j] = MAP[i][j];
 					System.out.printf("%c ", MAP[i][j]);
 				}
 			}
@@ -227,8 +229,10 @@ public class Main extends Thread{
 					} catch (InterruptedException e) {
 					}
 //					clearScreen();	
-					if(end){
-						this.interrupt();
+					try{interrupt();
+					sleep(30);}
+					catch(InterruptedException e){
+						return;
 					}
 					Realtimdisplay();
 				} // if ;
