@@ -131,9 +131,9 @@ public class Main extends Thread{
 	}
 	
 	public char[][] genMap(char[][] MAP) {
+		this.MAP = MAP;
 		int idx = 0;
 		MAX_PNT = new Point(MAP.length, MAP[0].length); // 맵크기 인식 시켜 줘야함
-		this.MAP = MAP;
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
 				if(MAP[i][j]=='S'){
@@ -231,6 +231,7 @@ public class Main extends Thread{
 					Realtimdisplay();
 				} // if ;
 			} // for ;
+			
 		} // main loop ;
 		Data pathData = lastData;
 		while (pathData != null) {
@@ -242,6 +243,7 @@ public class Main extends Thread{
 			pathData = pathData.parent; // ㅠㅠ 부모노드
 			// 뒤에서 부터 다시 출력
 		}
+		displaymap();
 	}
 
 	public static void clearScreen() {

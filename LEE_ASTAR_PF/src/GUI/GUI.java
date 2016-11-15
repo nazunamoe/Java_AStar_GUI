@@ -28,8 +28,7 @@ public class GUI extends JFrame{
 	static int Mode;
 	static File textfile;
 	Thread autoRefresh;
-	 
-	
+	 	
 	public void refresh(char[][] map){
 		for(int i=0; i<map.length; i++){
 			for(int j=0; j<map[0].length; j++){
@@ -63,8 +62,6 @@ public class GUI extends JFrame{
 			}
 		}
 	}
-	
-	
 
 	static Main ASTAR;
 	
@@ -118,8 +115,43 @@ public class GUI extends JFrame{
 		static Button buttons[][] = new Button[rowdata][columndata];
 		static char[][] Map = new char[rowdata][columndata];
 		
+		static JButton buttons_BUI[] = new JButton[4];
+		static JButton buttons_BUI2[] = new JButton[4];
+		
 		static File text;
 		Main main = new Main();
+		
+		public void convertMap(){
+			char[][] temp = new char[rowdata][columndata];
+			for(int x=0; x<buttons.length; x++){
+				for(int y=0; y<buttons[0].length; y++){
+					System.out.println(temp[x][y]);
+					switch(buttons[x][y].status){
+					case '.':{
+						temp[x][y] = '.';
+						break;
+					}
+					case 'W':{
+						temp[x][y] = 'W';
+						break;
+					}
+					case 'S':{
+						temp[x][y] = 'S';
+						break;
+					}
+					case 'E':{
+						temp[x][y] = 'E';
+						break;
+					}
+					default:{
+						
+					}
+					}
+				}
+			}
+			Map = temp;
+			main.genMap(temp);
+		}
 		
 		public void MapDisable(){
 			for (int r = 0; r < buttons.length; r++) {
@@ -141,14 +173,12 @@ public class GUI extends JFrame{
 	public class BGR extends status {
 		Main ASTAR;
 		public BGR() {
-			
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
 			setBackground(null);		
 			Container M = getContentPane();			
 			setSize((int) ((M.getSize().height) * (1.0)), (int) ((M.getSize().width) * (0.08))+15);
 			setLocation(15,(int) ((M.getSize().height) * (0.8))+35);
 			setLayout(new GridLayout(2,2, 15, 5));
-			JButton buttons_BUI[] = new JButton[4];
 			for (int i = 0; i < buttons_BUI.length; i++) {
 				buttons_BUI[i] = new JButton("매뉴" + (i + 1));
 				buttons_BUI[i].addActionListener(new ActionListener() {
@@ -157,64 +187,76 @@ public class GUI extends JFrame{
 							if (a.getSource() == buttons_BUI[i]) {
 								switch(buttons_BUI[i].getText()){
 								case "출발점 지정" :{
+									MapEnable();
 									buttons_BUI[0].setText("출발점 지정 종료");
 									buttons_BUI[1].setEnabled(false);
 									buttons_BUI[2].setEnabled(false);
+									buttons_BUI[3].setEnabled(false);
 									Mode = 1;
 									break;
 								}
 								case "출발점 지정 종료" :{
+									MapDisable();
 									buttons_BUI[0].setText("출발점 지정");
 									buttons_BUI[1].setEnabled(true);
 									buttons_BUI[2].setEnabled(true);
+									buttons_BUI[3].setEnabled(true);
 									Mode = 0;
 									break;
 								}
 								case "도착점 지정" :{
-									buttons_BUI[0].setEnabled(false);
+									MapEnable();
 									buttons_BUI[1].setText("도착점 지정 종료");
+									buttons_BUI[0].setEnabled(false);
 									buttons_BUI[2].setEnabled(false);
+									buttons_BUI[3].setEnabled(false);
 									Mode = 2;
 									break;
 								}
 								case "도착점 지정 종료" :{
-									buttons_BUI[0].setEnabled(true);
+									MapDisable();
 									buttons_BUI[1].setText("도착점 지정");
+									buttons_BUI[0].setEnabled(true);
 									buttons_BUI[2].setEnabled(true);
+									buttons_BUI[3].setEnabled(true);
 									Mode = 0;
 									break;
 								}
 								case "장애물 지정" :{
+									MapEnable();
+									buttons_BUI[2].setText("장애물 지정 종료");
 									buttons_BUI[0].setEnabled(false);
 									buttons_BUI[1].setEnabled(false);
-									buttons_BUI[2].setText("장애물 지정 종료");
-									buttons_BUI[1].setText("도착점 지정");
+									buttons_BUI[3].setEnabled(false);
 									Mode = 3;
 									break;
 								}
 								case "장애물 지정 종료" :{
+									MapDisable();
+									buttons_BUI[2].setText("장애물 지정");
 									buttons_BUI[0].setEnabled(true);
 									buttons_BUI[1].setEnabled(true);
-									buttons_BUI[2].setText("장애물 지정");
+									buttons_BUI[3].setEnabled(true);
 									Mode = 0;
 									break;
 								}
 								case "편집기 시작" :{
+									buttons_BUI2[1].setEnabled(false);
 									for(int x=0; x<3; x++){
 									buttons_BUI[x].setEnabled(true);}
 									buttons_BUI[3].setText("편집기 종료");
-									MapEnable();
 									Mode = 0;
 									break;
 								}
 								case "편집기 종료" :{
+									convertMap();
+									buttons_BUI2[1].setEnabled(true);
 									for(int x=0; x<3; x++){
 									buttons_BUI[x].setEnabled(false);}
 									buttons_BUI[3].setText("편집기 시작");
 									buttons_BUI[0].setText("출발점 지정");
 									buttons_BUI[1].setText("도착점 지정");
 									buttons_BUI[2].setText("장애물 지정");
-									MapDisable();
 									Mode = 0;
 									break;
 								}
@@ -231,7 +273,7 @@ public class GUI extends JFrame{
 			buttons_BUI[1].setText("도착점 지정");
 			buttons_BUI[2].setText("장애물 지정");
 			buttons_BUI[3].setText("편집기 시작");
-			for(int x=0; x<3; x++){
+			for(int x=0; x<=3; x++){
 				buttons_BUI[x].setEnabled(false);}
 			for(int i=0; i<=3; i++){
 				buttons_BUI[i].setBorderPainted(false);
@@ -244,11 +286,8 @@ public class GUI extends JFrame{
 	}
 
 	public class RUI extends status {
-		
-		public char[][] Map = new char[rowdata][columndata];
 			public void search(){
 				while(main.end == false){
-				main.genMap(Map);
 				main.search();
 				}
 			}
@@ -284,13 +323,12 @@ public class GUI extends JFrame{
 			setSize((int) ((M.getSize().height) * (0.2))+6, (int) ((M.getSize().width) * (0.6)-30));
 			setLocation((int) ((M.getSize().height) * (0.84)), 10);
 			setLayout(new GridLayout(6, 1, 0, 15));
-			JButton buttons_BUI[] = new JButton[4];
-			for (int i = 0; i < buttons_BUI.length; i++) {
-				buttons_BUI[i] = new JButton("매뉴" + (i + 1));
-				buttons_BUI[i].addActionListener(new ActionListener() {
+			for (int i = 0; i < buttons_BUI2.length; i++) {
+				buttons_BUI2[i] = new JButton("매뉴" + (i + 1));
+				buttons_BUI2[i].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent a) {
-						for (int i = 0; i < buttons_BUI.length; i++) {
-							if (a.getSource() == buttons_BUI[i]) {
+						for (int i = 0; i < buttons_BUI2.length; i++) {
+							if (a.getSource() == buttons_BUI2[i]) {
 								Mode = 0;
 								switch(i){
 								case 0:{
@@ -312,7 +350,7 @@ public class GUI extends JFrame{
 					                        	if(pointer == '.'){
 					                        		buttons[pointery][pointerx].setBackground(Color.DARK_GRAY);
 					                        		buttons[pointery][pointerx].block=false;
-					                        		buttons[pointery][pointerx].status='b';
+					                        		buttons[pointery][pointerx].status='.';
 					                        		Map[pointerx][pointery] = '.';
 					                        	}
 					                        	else if(pointer == 'S'){
@@ -320,13 +358,13 @@ public class GUI extends JFrame{
 					                        			JOptionPane.showMessageDialog(M, "출발점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
 					                        			br.close();
 					                        			MapClean();
-					                        			buttons_BUI[0].setEnabled(false);
-					                        			buttons_BUI[1].setEnabled(true);
+					                        			buttons_BUI2[0].setEnabled(false);
+					                        			buttons_BUI2[1].setEnabled(true);
 					                        			break;
 					                        		}else{
 					                        		buttons[pointery][pointerx].setBackground(Color.GREEN);
 					                        		buttons[pointery][pointerx].block=true;
-					                        		buttons[pointery][pointerx].status='s';
+					                        		buttons[pointery][pointerx].status='S';
 					                        		Map[pointerx][pointery] = 'S';
 					                        		start = true;}
 					                        	}
@@ -335,20 +373,20 @@ public class GUI extends JFrame{
 					                        			JOptionPane.showMessageDialog(M, "도착점이 두 개 이상 포착됨","에러",JOptionPane.ERROR_MESSAGE);
 					                        			br.close();
 					                        			MapClean();
-					                        			buttons_BUI[0].setEnabled(false);
-					                        			buttons_BUI[1].setEnabled(true);
+					                        			buttons_BUI2[0].setEnabled(false);
+					                        			buttons_BUI2[1].setEnabled(true);
 					                        			break;
 					                        		}else{
 					                        			buttons[pointery][pointerx].setBackground(Color.RED);
 					                        			buttons[pointery][pointerx].block=true;
-					                        			buttons[pointery][pointerx].status='e';
+					                        			buttons[pointery][pointerx].status='E';
 					                        			Map[pointerx][pointery] = 'E';
 					                        		end = true;}
 					                        	}
 					                        	else if(pointer == 'W'){
 					                        		buttons[pointery][pointerx].setBackground(Color.WHITE);
 					                        		buttons[pointery][pointerx].block=true;
-					                        		buttons[pointery][pointerx].status='w';
+					                        		buttons[pointery][pointerx].status='W';
 					                        		Map[pointerx][pointery] = 'W';
 					                        	}
 					                        	pointerx++;
@@ -362,8 +400,9 @@ public class GUI extends JFrame{
 										e.printStackTrace();
 									}
 									main.genMap(Map);
-									buttons_BUI[0].setEnabled(false);
-                        			buttons_BUI[1].setEnabled(true);
+									buttons_BUI[3].setEnabled(true);
+									buttons_BUI2[0].setEnabled(false);
+                        			buttons_BUI2[1].setEnabled(true);
 									break;
 								}
 								case 1:{
@@ -371,15 +410,16 @@ public class GUI extends JFrame{
 									boolean end=false;
 									for (int r = 0; r < buttons.length; r++) {
 										for (int j = 0; j < buttons[0].length; j++) {
-											if(buttons[r][j].status=='s'){
+											if(buttons[r][j].status=='S'){
 												start = true;
 											}
-											if(buttons[r][j].status=='e'){
+											if(buttons[r][j].status=='E'){
 												end = true;
 											}
 										}
 									}
 									if(start&&end){
+										convertMap();
 										search();
 									}else{
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);
@@ -406,20 +446,20 @@ public class GUI extends JFrame{
 						}
 					}
 				});
-				buttons_BUI[i].setBackground(Color.GRAY);
-				add(buttons_BUI[i]);
+				buttons_BUI2[i].setBackground(Color.GRAY);
+				add(buttons_BUI2[i]);
 			}
-			buttons_BUI[0].setText("맵 분석");
-			buttons_BUI[1].setText("탐색 시작");
-			buttons_BUI[2].setText("정보");
-			buttons_BUI[3].setText("종료");
-			buttons_BUI[1].setEnabled(false);
+			buttons_BUI2[0].setText("맵 분석");
+			buttons_BUI2[1].setText("탐색 시작");
+			buttons_BUI2[2].setText("정보");
+			buttons_BUI2[3].setText("종료");
+			buttons_BUI2[1].setEnabled(false);
 			for(int i=0; i<=3; i++){
-				buttons_BUI[i].setBorderPainted(false);
-				buttons_BUI[i].setFocusPainted(false);
-				buttons_BUI[i].setContentAreaFilled(false);
-				buttons_BUI[i].setFont(sub);
-				buttons_BUI[i].setForeground(Color.ORANGE);
+				buttons_BUI2[i].setBorderPainted(false);
+				buttons_BUI2[i].setFocusPainted(false);
+				buttons_BUI2[i].setContentAreaFilled(false);
+				buttons_BUI2[i].setFont(sub);
+				buttons_BUI2[i].setForeground(Color.ORANGE);
 			}
 		}
 	}
@@ -449,7 +489,6 @@ public class GUI extends JFrame{
 					buttons[i][j].setBorder(new LineBorder(Color.ORANGE, 1));
 					buttons[i][j].addActionListener(new ActionListener() {
 						public void actionPerformed(ActionEvent e) {
-							main.genMap(Map);
 							for (int i = 0; i < buttons.length; i++) {
 								for (int j = 0; j < buttons[0].length; j++) {
 									if (e.getSource() == buttons[i][j]) {
@@ -458,17 +497,16 @@ public class GUI extends JFrame{
 										case 1:{
 											for (int a = 0; a < buttons.length; a++) {
 												for (int b = 0; b < buttons[0].length; b++) {
-													if(buttons[a][b].status == 's'){
+													if(buttons[a][b].status == 'S'){
 														if(a!=i||b!=j){
 														System.out.println("출발점 2개이상 불가능");
 														blocked = 1;}
 														else if(a==i&&b==j){
 															System.out.println("출발점 해제됨");
 															blocked = 1;
-															buttons[i][j].status = 'b';
+															buttons[i][j].status = '.';
 															buttons[i][j].block = false;
 															buttons[i][j].setBackground(Color.DARK_GRAY);
-															main.MAP[i][j] = '.';
 														}else if(buttons[i][j].block){
 															System.out.println("중복 설정 불가능. 해제후 재시도");
 															break;
@@ -477,26 +515,24 @@ public class GUI extends JFrame{
 													}
 												}
 											}if(blocked == 0){
-											buttons[i][j].status = 's';
+											buttons[i][j].status = 'S';
 											buttons[i][j].setBackground(Color.green);
-											buttons[i][j].block = true;
-											main.MAP[i][j] = 'S';}
+											buttons[i][j].block = true;}
 											break;
 										}
 										case 2:{
 											for (int a = 0; a < buttons.length; a++) {
 												for (int b = 0; b < buttons[0].length; b++) {
-													if(buttons[a][b].status == 'e'){
+													if(buttons[a][b].status == 'E'){
 														if(a!=i||b!=j){
 															System.out.println("도착점 2개이상 불가능");
 															blocked = 1;}
 															else if(a==i&&b==j){
 																System.out.println("도착점 해제됨");
 																blocked = 1;
-																buttons[i][j].status = 'b';
+																buttons[i][j].status = '.';
 																buttons[i][j].setBackground(Color.DARK_GRAY);
 																buttons[i][j].block = false;
-																main.MAP[i][j] = '.';
 															}else if(buttons[i][j].block){
 																System.out.println("중복 설정 불가능. 해제후 재시도");
 																break;
@@ -506,31 +542,28 @@ public class GUI extends JFrame{
 												}
 											}
 											if(blocked == 0){
-												buttons[i][j].status = 'e';
+												buttons[i][j].status = 'E';
 												buttons[i][j].setBackground(Color.red);
-												buttons[i][j].block = true;
-												main.MAP[i][j] = 'E';}
+												buttons[i][j].block = true;}
 											break;
 										}
 										case 3:{
 											for (int a = 0; a < buttons.length; a++) {
 												for (int b = 0; b < buttons[0].length; b++) {
-													if(buttons[a][b].status == 'w'){
+													if(buttons[a][b].status == 'W'){
 														 if(a==i&&b==j){
 																blocked = 1;
-																buttons[i][j].status = 'b';
+																buttons[i][j].status = '.';
 																buttons[i][j].setBackground(Color.DARK_GRAY);
-																main.MAP[i][j] = '.';
 																break;															
 														}
 													}
 												}
 											}
 											if(blocked == 0){
-												buttons[i][j].status = 'w';
+												buttons[i][j].status = 'W';
 												buttons[i][j].setBackground(Color.white);
-												buttons[i][j].block = true;
-												main.MAP[i][j] = 'W';}
+												buttons[i][j].block = true;}
 											break;
 										}
 										case 0:{}
