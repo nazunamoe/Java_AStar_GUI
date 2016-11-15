@@ -40,13 +40,14 @@ public class GUI extends JFrame{
 		} catch (IOException e) {
 			System.out.println("이미지파일이 없습니다.");
 		} // 오버워치 로고 불러오는 부분
+		setIconImage(img);
 	
 		JLabel logo = new JLabel(new ImageIcon(img));
 		textfile = text;
 		rowdata = row;
 		columndata = column; // 인트로에서 받아온 파일과 사이즈를 GUI객체로 전송
 		
-		setTitle("A-STAR Algorithm");
+		setTitle("A * Algorithm implemented by Java");
 		setSize(500, 500);
 		setVisible(true);
 		Container c = getContentPane();
@@ -75,33 +76,38 @@ public class GUI extends JFrame{
 		static File text;
 		Main main = new Main();
 		
+		public void search(){
+			main.search();
+			refresh(main.Result);
+		}
+		
 		public void refresh(char[][] map){ // char맵을 받아서 button을 갱신
 			for(int i=0; i<map.length; i++){
 				for(int j=0; j<map[0].length; j++){
 					char pointer = map[i][j];
 					switch(pointer){
 					case 'S':{
-						buttons[i][j].setForeground(Color.green);
+						showmap.buttons[i][j].setBackground(Color.GREEN);
 						break;
 					}
 					case 'E':{
-						buttons[i][j].setForeground(Color.red);
+						showmap.buttons[i][j].setBackground(Color.red);
 						break;
 					}
 					case '.':{
-						buttons[i][j].setForeground(Color.DARK_GRAY);
+						showmap.buttons[i][j].setBackground(Color.DARK_GRAY);
 						break;
 					}
 					case 'W':{
-						buttons[i][j].setForeground(Color.white);
+						showmap.buttons[i][j].setBackground(Color.white);
 						break;
 					}
 					case '-':{
-						buttons[i][j].setForeground(Color.ORANGE);
+						showmap.buttons[i][j].setBackground(Color.gray);
 						break;
 					}
 					case '@':{
-						buttons[i][j].setForeground(Color.magenta);
+						showmap.buttons[i][j].setBackground(Color.cyan);
 						break;
 					}
 					}
@@ -271,9 +277,7 @@ public class GUI extends JFrame{
 	}
 
 	public class RUI extends status { // 맵 분석, 탐색 시작, 정보, 종료가 있는 컨트롤러
-			public void search(){
-				main.search();
-			}
+
 	
 		public void MapClean(){
 			text = null;

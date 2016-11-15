@@ -3,6 +3,7 @@ package GUI;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
@@ -11,22 +12,33 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Intro extends JFrame {
 	Intro(){
-		Font main = new Font("맑은 고딕",0,30);
-		Font sub = new Font("맑은 고딕",0,15);
-		setSize(300, 100);
+		
+		Image img = null;
+		try {
+			File sourceimage = new File("src/overwatch.png");
+			img = ImageIO.read(sourceimage);
+		} catch (IOException e) {
+			System.out.println("이미지파일이 없습니다.");
+		} // 오버워치 로고 불러오는 부분
+		setIconImage(img);
+		
+		Font sub = new Font("맑은 고딕",Font.BOLD,15);
+		setSize(300, 120);
 		setVisible(true);
 		Container c = getContentPane();
 		c.setBackground(Color.DARK_GRAY);
 		c.setLayout(null);
-		setTitle("맵 불러오기");
+		setTitle("A * Algorithm");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		
 		JButton Open = new JButton("맵 열기");
@@ -35,10 +47,10 @@ public class Intro extends JFrame {
 		Exit.setFont(sub);
 		
 		Open.setSize(100,50);
-		Open.setLocation(30,10);
+		Open.setLocation(30,40);
 		
 		Exit.setSize(100,50);
-		Exit.setLocation(160,10);
+		Exit.setLocation(160,40);
 		
 		Exit.setBorderPainted(false);
 		Exit.setFocusPainted(false);
@@ -52,6 +64,14 @@ public class Intro extends JFrame {
 		
 		c.add(Open);
 		c.add(Exit);
+		
+		JLabel Title = new JLabel("A * Algorithm Implemented By JAVA");
+		Title.setFont(new Font("Segoe UI",Font.ITALIC,17));
+		
+		c.add(Title);
+		Title.setSize(420,25);
+		Title.setLocation(10,8);
+		Title.setForeground(Color.orange);
 		
 		setResizable(false);
 		
@@ -97,7 +117,7 @@ public class Intro extends JFrame {
 		Exit.addActionListener(new ActionListener(){
 			public void actionPerformed(ActionEvent e) {
 				int result = 0;
-				result = JOptionPane.showConfirmDialog(c, "프로그램을 종료하시겠습니까?","종료",JOptionPane.INFORMATION_MESSAGE);
+				result = JOptionPane.showConfirmDialog(c, "Will you exit program?","Exit",JOptionPane.INFORMATION_MESSAGE);
 				if(result == JOptionPane.CANCEL_OPTION||result == JOptionPane.CLOSED_OPTION){
 				}if(result == JOptionPane.OK_OPTION){
 				System.exit(1);}

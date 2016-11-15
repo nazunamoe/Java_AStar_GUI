@@ -47,6 +47,7 @@ public class Main extends Thread{
 	};
 
 	public char[][] MAP;
+	public char[][] Result;
 
 	String[] MAP_temp; // TXT 파일 받는 놈
 
@@ -165,9 +166,11 @@ public class Main extends Thread{
 	refresh = false;}
 
 	void displaymap()  {
+		Result = MAP;
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
 				String text = Character.toString(MAP[i][j]);
+				Result[i][j] = MAP[i][j];
 				System.out.printf("%c ", MAP[i][j]);
 			}
 			System.out.printf("\n");
@@ -226,12 +229,10 @@ public class Main extends Thread{
 //					clearScreen();	
 					if(end){
 						this.interrupt();
-						
 					}
 					Realtimdisplay();
 				} // if ;
 			} // for ;
-			
 		} // main loop ;
 		Data pathData = lastData;
 		while (pathData != null) {
