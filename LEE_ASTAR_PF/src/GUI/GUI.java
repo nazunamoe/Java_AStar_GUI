@@ -24,62 +24,27 @@ public class GUI extends JFrame{
 
 	static int rowdata;
 	static int columndata;
-	static Button buttons[][]= new Button[rowdata][columndata];
 	static int Mode;
 	static File textfile;
 	Thread autoRefresh;
-	 	
-	public void refresh(char[][] map){
-		for(int i=0; i<map.length; i++){
-			for(int j=0; j<map[0].length; j++){
-				char pointer = map[i][j];
-				switch(pointer){
-				case 'S':{
-					buttons[i][j].setForeground(Color.green);
-					break;
-				}
-				case 'E':{
-					buttons[i][j].setForeground(Color.red);
-					break;
-				}
-				case '.':{
-					buttons[i][j].setForeground(Color.DARK_GRAY);
-					break;
-				}
-				case 'W':{
-					buttons[i][j].setForeground(Color.white);
-					break;
-				}
-				case '-':{
-					buttons[i][j].setForeground(Color.ORANGE);
-					break;
-				}
-				case '@':{
-					buttons[i][j].setForeground(Color.magenta);
-					break;
-				}
-				}
-			}
-		}
-	}
-
-	static Main ASTAR;
 	
-	public GUI(int row, int column, File text) {
+	public GUI(int row, int column, File text) { // GUI 메인 클래스
+		
 		Font main = new Font("맑은 고딕",0,30);
 		Font sub = new Font("맑은 고딕",0,15);
+		
 		Image img = null;
 		try {
 			File sourceimage = new File("src/overwatch.png");
 			img = ImageIO.read(sourceimage);
 		} catch (IOException e) {
 			System.out.println("이미지파일이 없습니다.");
-		}
+		} // 오버워치 로고 불러오는 부분
 	
 		JLabel logo = new JLabel(new ImageIcon(img));
 		textfile = text;
 		rowdata = row;
-		columndata = column;
+		columndata = column; // 인트로에서 받아온 파일과 사이즈를 GUI객체로 전송
 		
 		setTitle("A-STAR Algorithm");
 		setSize(500, 500);
@@ -91,26 +56,15 @@ public class GUI extends JFrame{
 		add(new showmap());
 		add(new BGR());
 		add(new RUI());
-		
 
-		JLabel Title = new JLabel("A Star Algorithm");
-		Title.setLocation(10,430);
-		Title.setSize(300,40);
-		Title.setFont(main);
-		Title.setForeground(Color.WHITE);
-		
 		logo.setSize(100,100);
 		logo.setLocation(385, 280);
 		add(logo);
 		
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
-		//		c.add(Title);
-		// setResizable(false);
 	}
 	
-	public static class status extends Panel{
-		Main ASTAR = new Main();
-		public JFileChooser jfc = new JFileChooser();
+	public static class status extends Panel{ // 모든 패널이 상속하는 클래스, 공유해야 할 데이터를 보존
 		
 		static Button buttons[][] = new Button[rowdata][columndata];
 		static char[][] Map = new char[rowdata][columndata];
@@ -121,11 +75,44 @@ public class GUI extends JFrame{
 		static File text;
 		Main main = new Main();
 		
-		public void convertMap(){
+		public void refresh(char[][] map){ // char맵을 받아서 button을 갱신
+			for(int i=0; i<map.length; i++){
+				for(int j=0; j<map[0].length; j++){
+					char pointer = map[i][j];
+					switch(pointer){
+					case 'S':{
+						buttons[i][j].setForeground(Color.green);
+						break;
+					}
+					case 'E':{
+						buttons[i][j].setForeground(Color.red);
+						break;
+					}
+					case '.':{
+						buttons[i][j].setForeground(Color.DARK_GRAY);
+						break;
+					}
+					case 'W':{
+						buttons[i][j].setForeground(Color.white);
+						break;
+					}
+					case '-':{
+						buttons[i][j].setForeground(Color.ORANGE);
+						break;
+					}
+					case '@':{
+						buttons[i][j].setForeground(Color.magenta);
+						break;
+					}
+					}
+				}
+			}
+		}
+
+		public void convertMap(){ // 버튼으로 된 맵을 char로 변환하여 Map을 갱신
 			char[][] temp = new char[rowdata][columndata];
 			for(int x=0; x<buttons.length; x++){
 				for(int y=0; y<buttons[0].length; y++){
-					System.out.println(temp[x][y]);
 					switch(buttons[x][y].status){
 					case '.':{
 						temp[y][x] = '.';
@@ -153,7 +140,7 @@ public class GUI extends JFrame{
 			main.genMap(temp);
 		}
 		
-		public void MapDisable(){
+		public void MapDisable(){ // 버튼으로 된 맵을 사용하지 못하도록 제한
 			for (int r = 0; r < buttons.length; r++) {
 				for (int j = 0; j < buttons[0].length; j++) {
 					buttons[r][j].setEnabled(false);
@@ -161,7 +148,7 @@ public class GUI extends JFrame{
 			}
 		}
 		
-		public void MapEnable(){
+		public void MapEnable(){ //버튼으로 된 맵을 사용할 수 있도록 설정
 			for (int r = 0; r < buttons.length; r++) {
 				for (int j = 0; j < buttons[0].length; j++) {
 					buttons[r][j].setEnabled(true);
@@ -170,8 +157,7 @@ public class GUI extends JFrame{
 		}
 	}
 
-	public class BGR extends status {
-		Main ASTAR;
+	public class BGR extends status { // 출발점, 도착점, 장애물 설정 가능한 편집기 기능을 정의
 		public BGR() {
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
 			setBackground(null);		
@@ -184,7 +170,7 @@ public class GUI extends JFrame{
 				buttons_BUI[i].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent a) {
 						for (int i = 0; i < buttons_BUI.length; i++) {
-							if (a.getSource() == buttons_BUI[i]) {
+							if (a.getSource() == buttons_BUI[i]) { // Mode변수를 이용하여 편집기의 모드를 조정하거나 빠져나갈 수 있음
 								switch(buttons_BUI[i].getText()){
 								case "출발점 지정" :{
 									MapEnable();
@@ -265,7 +251,6 @@ public class GUI extends JFrame{
 						}
 					}
 				});
-
 				buttons_BUI[i].setBackground(Color.GRAY);
 				add(buttons_BUI[i]);
 			}
@@ -285,11 +270,9 @@ public class GUI extends JFrame{
 		}
 	}
 
-	public class RUI extends status {
+	public class RUI extends status { // 맵 분석, 탐색 시작, 정보, 종료가 있는 컨트롤러
 			public void search(){
-				while(main.end == false){
 				main.search();
-				}
 			}
 	
 		public void MapClean(){
@@ -314,7 +297,6 @@ public class GUI extends JFrame{
 			}
 		}
 		
-		Main ASTAR;
 		public RUI()  {
 			setBackground(Color.DARK_GRAY);
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
@@ -420,7 +402,7 @@ public class GUI extends JFrame{
 									}
 									if(start&&end){
 										convertMap();
-										search();
+										search();		
 									}else{
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);
 										break;
@@ -464,8 +446,7 @@ public class GUI extends JFrame{
 		}
 	}
 
-	public class showmap extends status {
-		Main ASTAR;
+	public class showmap extends status { // 버튼 맵 객체, 편집기 기능을 구현
 		public showmap() {
 			
 			Container M = getContentPane();
@@ -492,12 +473,12 @@ public class GUI extends JFrame{
 							for (int i = 0; i < buttons.length; i++) {
 								for (int j = 0; j < buttons[0].length; j++) {
 									if (e.getSource() == buttons[i][j]) {
-										int blocked = 0;
+										int blocked = 0; // 맵을 변경하였을 시 제한 사항이 발생할 경우 1로 변경되며 if문을 통해 맵 변경이 제한됨
 										switch(Mode){
 										case 1:{
 											for (int a = 0; a < buttons.length; a++) {
 												for (int b = 0; b < buttons[0].length; b++) {
-													if(buttons[a][b].status == 'S'){
+													if(buttons[a][b].status == 'S'){ // 출발점이나 도착점이 2개가 될때, 둘의 좌표가 같으면 기존의점을 지우는 것으로 인식
 														if(a!=i||b!=j){
 														System.out.println("출발점 2개이상 불가능");
 														blocked = 1;}
@@ -585,6 +566,4 @@ public class GUI extends JFrame{
 			}
 		}
 	}
-
-
 }
