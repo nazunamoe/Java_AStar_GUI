@@ -128,19 +128,19 @@ public class GUI extends JFrame{
 					System.out.println(temp[x][y]);
 					switch(buttons[x][y].status){
 					case '.':{
-						temp[x][y] = '.';
+						temp[y][x] = '.';
 						break;
 					}
 					case 'W':{
-						temp[x][y] = 'W';
+						temp[y][x] = 'W';
 						break;
 					}
 					case 'S':{
-						temp[x][y] = 'S';
+						temp[y][x] = 'S';
 						break;
 					}
 					case 'E':{
-						temp[x][y] = 'E';
+						temp[y][x] = 'E';
 						break;
 					}
 					default:{
