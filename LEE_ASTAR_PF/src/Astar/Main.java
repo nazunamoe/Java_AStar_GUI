@@ -222,7 +222,7 @@ public class Main extends Thread{
 						heap.add(newData);
 					}
 					try {
-						sleep(350);
+						sleep(50);
 						// 속도 조절 
 					} catch (InterruptedException e) {
 					}

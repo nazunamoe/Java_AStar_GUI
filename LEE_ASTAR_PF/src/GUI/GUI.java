@@ -65,7 +65,7 @@ public class GUI extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	public static class status extends Panel{ // 모든 패널이 상속하는 클래스, 공유해야 할 데이터를 보존
+	public static class status extends Panel implements Runnable{ // 모든 패널이 상속하는 클래스, 공유해야 할 데이터를 보존
 		
 		static Button buttons[][] = new Button[rowdata][columndata];
 		static char[][] Map = new char[rowdata][columndata];
@@ -73,18 +73,25 @@ public class GUI extends JFrame{
 		static JButton buttons_BUI[] = new JButton[4];
 		static JButton buttons_BUI2[] = new JButton[4];
 		
+		boolean completed=false;
+		
 		static File text;
 		Main main = new Main();
 		
 		public void search(){
 			main.search();
 			refresh(main.Result);
+			completed = true;
+		}
+		
+		public void run(){
+			refresh(main.MAP);
 		}
 		
 		public void refresh(char[][] map){ // char맵을 받아서 button을 갱신
 			for(int i=0; i<map.length; i++){
 				for(int j=0; j<map[0].length; j++){
-					char pointer = map[i][j];
+					char pointer = map[j][i];
 					switch(pointer){
 					case 'S':{
 						showmap.buttons[i][j].setBackground(Color.GREEN);
@@ -144,6 +151,27 @@ public class GUI extends JFrame{
 			}
 			Map = temp;
 			main.genMap(temp);
+		}
+		
+		public void removeRoad(){
+			for(int x=0; x<buttons.length; x++){
+				for(int y=0; y<buttons[0].length; y++){
+					switch(Map[x][y]){
+					case'-':{
+						System.out.println("1");
+						Map[x][y] = '.';
+						showmap.buttons[x][y].setBackground(Color.darkGray);
+						break;
+					}
+					case'@':{
+						System.out.println("2");
+						Map[x][y] = '.';
+						showmap.buttons[x][y].setBackground(Color.darkGray);
+						break;
+						}
+					}
+				}
+			}
 		}
 		
 		public void MapDisable(){ // 버튼으로 된 맵을 사용하지 못하도록 제한
@@ -290,17 +318,6 @@ public class GUI extends JFrame{
 			}
 		}
 		
-		public void RoadClean(){
-			for (int r = 0; r < buttons.length; r++) {
-				for (int j = 0; j < buttons[0].length; j++) {
-					// 아직 미구현 기능, 지나간 경로를 지우는 기능
-					buttons[r][j].status = 'b';
-					buttons[r][j].block = false;
-					buttons[r][j].setBackground(Color.DARK_GRAY);
-				}
-			}
-		}
-		
 		public RUI()  {
 			setBackground(Color.DARK_GRAY);
 			Font sub = new Font("맑은 고딕",Font.BOLD,12);
@@ -337,7 +354,7 @@ public class GUI extends JFrame{
 					                        		buttons[pointery][pointerx].setBackground(Color.DARK_GRAY);
 					                        		buttons[pointery][pointerx].block=false;
 					                        		buttons[pointery][pointerx].status='.';
-					                        		Map[pointerx][pointery] = '.';
+					                        		Map[pointery][pointerx] = '.';
 					                        	}
 					                        	else if(pointer == 'S'){
 					                        		if(start){
@@ -351,7 +368,7 @@ public class GUI extends JFrame{
 					                        		buttons[pointery][pointerx].setBackground(Color.GREEN);
 					                        		buttons[pointery][pointerx].block=true;
 					                        		buttons[pointery][pointerx].status='S';
-					                        		Map[pointerx][pointery] = 'S';
+					                        		Map[pointery][pointerx] = 'S';
 					                        		start = true;}
 					                        	}
 					                        	else if(pointer == 'E'){
@@ -366,14 +383,14 @@ public class GUI extends JFrame{
 					                        			buttons[pointery][pointerx].setBackground(Color.RED);
 					                        			buttons[pointery][pointerx].block=true;
 					                        			buttons[pointery][pointerx].status='E';
-					                        			Map[pointerx][pointery] = 'E';
+					                        			Map[pointery][pointerx]= 'E';
 					                        		end = true;}
 					                        	}
 					                        	else if(pointer == 'W'){
 					                        		buttons[pointery][pointerx].setBackground(Color.WHITE);
 					                        		buttons[pointery][pointerx].block=true;
 					                        		buttons[pointery][pointerx].status='W';
-					                        		Map[pointerx][pointery] = 'W';
+					                        		Map[pointery][pointerx] = 'W';
 					                        	}
 					                        	pointerx++;
 					                        }else{
@@ -405,6 +422,11 @@ public class GUI extends JFrame{
 										}
 									}
 									if(start&&end){
+										
+										if(completed){
+											removeRoad();
+											System.out.println("결과 지워짐");
+										}
 										convertMap();
 										search();		
 									}else{
