@@ -2,6 +2,8 @@ package Astar;
 
 import java.io.*;
 import java.util.ArrayList;
+
+import GUI.Button;
 import GUI.GUI;
 
 public class Main extends Thread{
@@ -21,6 +23,8 @@ public class Main extends Thread{
 	final int speed = 0; // 탐색스피드
 	public boolean end;
 	public boolean refresh;
+	
+	Button buttons[][]; // GUI에서 넘겨받을 데이터 미리 선언
 	
 	String[] map = { "....................", // 1
 			"...WWWW.............", // 2
@@ -47,7 +51,6 @@ public class Main extends Thread{
 	};
 
 	public char[][] MAP;
-	public char[][] Result;
 
 	String[] MAP_temp; // TXT 파일 받는 놈
 
@@ -63,9 +66,13 @@ public class Main extends Thread{
 	Point END_PNT = null;
 	Point Realtime_NODE = START_PNT;
 	
-	public Main() {
-		
+	public Main(Button[][] inputmap) {
+			this.buttons = inputmap;
 		}
+	
+	public void run(){
+		
+	}
 	
 	public void getMap() { 
 		try {
@@ -115,7 +122,7 @@ public class Main extends Thread{
 	public char[][] genMap() {
 		int idx = 0;
 		 MAP = new char[MAP_temp[0].length()][MAP_temp.length];
-		 Result = MAP;
+//		 Result = MAP;
 		for (String s : MAP_temp) {
 			char[] cs = s.replace(" ", "").toCharArray();
 			for (int i = 0; i < cs.length; i++) {
@@ -147,32 +154,24 @@ public class Main extends Thread{
 		}
 		return MAP;
 	}
+	
 	void Realtimdisplay() {
-		
-		genMap(MAP);
-		Result = MAP;
-		refresh = true;
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
 				if (i == Realtime_NODE.x && j == Realtime_NODE.y) {
-					Result[i][j] = '@';
-					System.out.printf("@ ");
+					System.out.printf("%c ", NAW_NODE);
 				} else {
-					Result[i][j] = MAP[i][j];
 					System.out.printf("%c ", MAP[i][j]);
 				}
 			}
 			System.out.printf("\n");
 		}
 		System.out.printf("\n");
-	refresh = false;}
+	}
 
-	void displaymap()  {
-		Result = MAP;
+	void displaymap() {
 		for (int j = 0; j < MAX_PNT.y; j++) {
 			for (int i = 0; i < MAX_PNT.x; i++) {
-				String text = Character.toString(MAP[i][j]);
-				Result[i][j] = MAP[i][j];
 				System.out.printf("%c ", MAP[i][j]);
 			}
 			System.out.printf("\n");
@@ -223,17 +222,13 @@ public class Main extends Thread{
 						Data newData = new Data(nextPoint, data.g + 1, h, data);
 						heap.add(newData);
 					}
-					try {
-						sleep(50);
-						// 속도 조절 
-					} catch (InterruptedException e) {
-					}
 //					clearScreen();	
-					try{interrupt();
-					sleep(30);}
-					catch(InterruptedException e){
-						return;
+					try{
+						Thread.sleep(100);
 					}
+						catch(InterruptedException e){
+							System.out.println("interrupted!main");
+						}
 					Realtimdisplay();
 				} // if ;
 			} // for ;

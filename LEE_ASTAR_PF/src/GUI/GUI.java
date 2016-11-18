@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import Astar.Main;
@@ -24,9 +25,8 @@ public class GUI extends JFrame{
 
 	static int rowdata;
 	static int columndata;
-	static int Mode;
+	
 	static File textfile;
-	Thread autoRefresh;
 	
 	public GUI(int row, int column, File text) { // GUI 메인 클래스
 		
@@ -65,7 +65,7 @@ public class GUI extends JFrame{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 	
-	public static class status extends Panel implements Runnable{ // 모든 패널이 상속하는 클래스, 공유해야 할 데이터를 보존
+	public static class status extends Panel {  // 모든 패널이 상속하는 클래스, 공유해야 할 데이터를 보존
 		
 		static Button buttons[][] = new Button[rowdata][columndata];
 		static char[][] Map = new char[rowdata][columndata];
@@ -73,68 +73,14 @@ public class GUI extends JFrame{
 		static JButton buttons_BUI[] = new JButton[4];
 		static JButton buttons_BUI2[] = new JButton[4];
 		
-		boolean completed=false;
+		static int Mode;
 		
 		static File text;
 		Main main = new Main();
-		
-		
-		
 		public void search(){
-			Runnable r = new status();
-			Thread t = new Thread(r);
-			t.start();
 			main.search();
-			refresh(main.MAP);
-			completed = true;
 		}
-		
-		public void run(){
-			System.out.println("not");
-			if(main.isInterrupted()){
-				System.out.println("Interrupted");
-			refresh(main.MAP);
-			main.notify();}
-		}
-		
-		public void refreshAuto(){
-			refresh(main.MAP);
-		}
-		
-		public void refresh(char[][] map){ // char맵을 받아서 button을 갱신
-			for(int i=0; i<map.length; i++){
-				for(int j=0; j<map[0].length; j++){
-					char pointer = map[j][i];
-					switch(pointer){
-					case 'S':{
-						showmap.buttons[i][j].setBackground(Color.GREEN);
-						break;
-					}
-					case 'E':{
-						showmap.buttons[i][j].setBackground(Color.red);
-						break;
-					}
-					case '.':{
-						showmap.buttons[i][j].setBackground(Color.DARK_GRAY);
-						break;
-					}
-					case 'W':{
-						showmap.buttons[i][j].setBackground(Color.white);
-						break;
-					}
-					case '-':{
-						showmap.buttons[i][j].setBackground(Color.gray);
-						break;
-					}
-					case '@':{
-						showmap.buttons[i][j].setBackground(Color.cyan);
-						break;
-					}
-					}
-				}
-			}
-		}
-
+	
 		public void convertMap(){ // 버튼으로 된 맵을 char로 변환하여 Map을 갱신
 			char[][] temp = new char[rowdata][columndata];
 			for(int x=0; x<buttons.length; x++){
@@ -435,11 +381,8 @@ public class GUI extends JFrame{
 										}
 									}
 									if(start&&end){
-										
-										if(completed){
-											removeRoad();
-											System.out.println("결과 지워짐");
-										}
+										removeRoad();
+										System.out.println("결과 지워짐");
 										convertMap();
 										search();		
 									}else{
