@@ -76,9 +76,11 @@ public class GUI extends JFrame{
 		static int Mode;
 		
 		static File text;
-		Main main = new Main();
-		public void search(){
-			main.search();
+		Main main = new Main(buttons);
+		
+		public status(){
+			
+			
 		}
 	
 		public void convertMap(){ // 버튼으로 된 맵을 char로 변환하여 Map을 갱신
@@ -109,7 +111,6 @@ public class GUI extends JFrame{
 				}
 			}
 			Map = temp;
-			main.genMap(temp);
 		}
 		
 		public void removeRoad(){
@@ -361,7 +362,6 @@ public class GUI extends JFrame{
 									} catch (IOException e) {
 										e.printStackTrace();
 									}
-									main.genMap(Map);
 									buttons_BUI[3].setEnabled(true);
 									buttons_BUI2[0].setEnabled(false);
                         			buttons_BUI2[1].setEnabled(true);
@@ -381,10 +381,7 @@ public class GUI extends JFrame{
 										}
 									}
 									if(start&&end){
-										removeRoad();
-										System.out.println("결과 지워짐");
-										convertMap();
-										search();		
+										main.start();
 									}else{
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);
 										break;

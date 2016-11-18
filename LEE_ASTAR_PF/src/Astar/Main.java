@@ -1,6 +1,8 @@
 package Astar;
 
+import java.awt.Color;
 import java.io.*;
+import java.nio.channels.InterruptedByTimeoutException;
 import java.util.ArrayList;
 
 import GUI.Button;
@@ -51,6 +53,8 @@ public class Main extends Thread{
 	};
 
 	public char[][] MAP;
+	
+	public boolean doing;
 
 	String[] MAP_temp; // TXT ÆÄÀÏ ¹Þ´Â ³ð
 
@@ -71,7 +75,50 @@ public class Main extends Thread{
 		}
 	
 	public void run(){
-		
+		while(!end){
+			search();
+			try{
+				Thread.sleep(1000);
+			}catch(InterruptedException e){
+				System.out.println("REFRESH!!!!");
+				refreshMap();
+				return;
+			}
+		}
+	}
+	
+	public void refreshMap(){
+		for(int i=0; i<MAP.length; i++){
+			for(int j=0; j<MAP[0].length; j++){
+				char pointer = MAP[i][j];
+				switch(pointer){
+					case'S':{
+						buttons[i][j].setForeground(Color.GREEN);
+						break;
+					}
+					case 'E':{
+						buttons[i][j].setForeground(Color.RED);
+						break;
+					}
+					case '.':{
+						buttons[i][j].setForeground(Color.DARK_GRAY);
+						break;
+					}
+					case '-':{
+						buttons[i][j].setForeground(Color.GRAY);
+						break;
+					}
+					case '@':{
+						buttons[i][j].setForeground(Color.CYAN);
+						break;
+					}
+					case 'W':{
+						buttons[i][j].setForeground(Color.WHITE);
+						break;
+					}
+				}
+			}
+		}
 	}
 	
 	public void getMap() { 
@@ -167,6 +214,7 @@ public class Main extends Thread{
 			System.out.printf("\n");
 		}
 		System.out.printf("\n");
+		this.interrupt();
 	}
 
 	void displaymap() {
@@ -223,13 +271,6 @@ public class Main extends Thread{
 						heap.add(newData);
 					}
 //					clearScreen();	
-					try{
-						Thread.sleep(100);
-					}
-						catch(InterruptedException e){
-							System.out.println("interrupted!main");
-						}
-					Realtimdisplay();
 				} // if ;
 			} // for ;
 		} // main loop ;
