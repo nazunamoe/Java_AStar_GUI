@@ -381,6 +381,7 @@ public class GUI extends JFrame{
 										}
 									}
 									if(start&&end){
+										main.genMap(Map);
 										main.start();
 									}else{
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,","에러",JOptionPane.ERROR_MESSAGE);

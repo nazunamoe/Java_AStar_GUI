@@ -27,30 +27,6 @@ public class Main extends Thread{
 	public boolean refresh;
 	
 	Button buttons[][]; // GUI에서 넘겨받을 데이터 미리 선언
-	
-	String[] map = { "....................", // 1
-			"...WWWW.............", // 2
-			"......W.............", // 3
-			"......W.............", // 4
-			"......W.............", // 5
-			"......W.............", // 6
-			"......W.............", // 7
-			"......W.............", // 8
-			"...WWWW.............", // 9
-			".................E.."// 10
-	};
-
-	String[] map1 = { "....................", // 1
-			"...WWWW.............", // 2
-			"......W.............", // 3
-			"......W.............", // 4
-			"......W.............", // 5
-			"......W.............", // 6
-			"......W.............", // 7
-			"......W.............", // 8
-			"...WWWW.............", // 9
-			"...W.............E.."// 10
-	};
 
 	public char[][] MAP;
 	
@@ -75,15 +51,13 @@ public class Main extends Thread{
 		}
 	
 	public void run(){
-		while(!end){
-			search();
+		search();
 			try{
 				Thread.sleep(1000);
 			}catch(InterruptedException e){
 				System.out.println("REFRESH!!!!");
-				refreshMap();
+				
 				return;
-			}
 		}
 	}
 	
@@ -91,29 +65,36 @@ public class Main extends Thread{
 		for(int i=0; i<MAP.length; i++){
 			for(int j=0; j<MAP[0].length; j++){
 				char pointer = MAP[i][j];
+				buttons[i][j].setText("dd");
 				switch(pointer){
 					case'S':{
 						buttons[i][j].setForeground(Color.GREEN);
+						buttons[i][j].setBackground(Color.GREEN);
 						break;
 					}
 					case 'E':{
 						buttons[i][j].setForeground(Color.RED);
+						buttons[i][j].setBackground(Color.RED);
 						break;
 					}
 					case '.':{
 						buttons[i][j].setForeground(Color.DARK_GRAY);
+						buttons[i][j].setBackground(Color.DARK_GRAY);
 						break;
 					}
 					case '-':{
 						buttons[i][j].setForeground(Color.GRAY);
+						buttons[i][j].setBackground(Color.GRAY);
 						break;
 					}
 					case '@':{
 						buttons[i][j].setForeground(Color.CYAN);
+						buttons[i][j].setBackground(Color.CYAN);
 						break;
 					}
 					case 'W':{
 						buttons[i][j].setForeground(Color.WHITE);
+						buttons[i][j].setBackground(Color.WHITE);
 						break;
 					}
 				}
@@ -214,7 +195,7 @@ public class Main extends Thread{
 			System.out.printf("\n");
 		}
 		System.out.printf("\n");
-		this.interrupt();
+		refreshMap();
 	}
 
 	void displaymap() {
@@ -270,6 +251,14 @@ public class Main extends Thread{
 						Data newData = new Data(nextPoint, data.g + 1, h, data);
 						heap.add(newData);
 					}
+					try{
+						Thread.sleep(1000);
+					}catch(InterruptedException e){
+						System.out.println("REFRESH!!!!");
+						
+						return;
+				}
+					 Realtimdisplay();
 //					clearScreen();	
 				} // if ;
 			} // for ;
