@@ -21,7 +21,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-public class GUI extends JFrame{
+public class GUI extends JFrame {
 
 	static int rowdata;
 	static int columndata;
@@ -73,14 +73,13 @@ public class GUI extends JFrame{
 
 		static JButton buttons_BUI[] = new JButton[4];
 		static JButton buttons_BUI2[] = new JButton[4];
-
+		static NumberField speed = new NumberField();
 		static int Mode;
 
 		static File text;
 		Main main = new Main(buttons);
 
 		public status() {
-
 		}
 
 		public void convertMap() { // 버튼으로 된 맵을 char로 변환하여 Map을 갱신
@@ -164,10 +163,7 @@ public class GUI extends JFrame{
 				buttons_BUI[i].addActionListener(new ActionListener() {
 					public void actionPerformed(ActionEvent a) {
 						for (int i = 0; i < buttons_BUI.length; i++) {
-							if (a.getSource() == buttons_BUI[i]) { // Mode변수를
-																	// 이용하여 편집기의
-																	// 모드를 조정하거나
-																	// 빠져나갈 수 있음
+							if (a.getSource() == buttons_BUI[i]) { // Mode변수를 이용하여 편집기의 모드를 조정하거나 빠져나갈 수 있음
 								switch (buttons_BUI[i].getText()) {
 								case "출발점 지정": {
 									MapEnable();
@@ -292,37 +288,37 @@ public class GUI extends JFrame{
 			JButton speedok = new JButton("속도 적용");
 			speedtitle.setFont(sub);
 			speedok.setFont(sub);
-			NumberField speed = new NumberField();
+			
 			M.add(speed);
 			M.add(speedtitle);
 			M.add(speedok);
-			speed.setSize(60,20);
-			speedtitle.setSize(60,20);
-			speedok.setSize(100,20);
+			speed.setSize(60, 20);
+			speedtitle.setSize(60, 20);
+			speedok.setSize(100, 20);
 			speedtitle.setForeground(Color.orange);
 			speedok.setForeground(Color.ORANGE);
 			speedok.setBackground(Color.DARK_GRAY);
 			speedok.setBorderPainted(false);
 			speedok.setFocusPainted(false);
 			speedok.setContentAreaFilled(false);
-			speed.setLocation((int) ((M.getSize().height) * (0.84))+35, 210);
+			speed.setLocation((int) ((M.getSize().height) * (0.84)) + 35, 210);
 			speedtitle.setLocation((int) ((M.getSize().height) * (0.84)), 210);
-			speedok.setLocation((int) ((M.getSize().height) * (0.84))-5, 235);
+			speedok.setLocation((int) ((M.getSize().height) * (0.84)) - 5, 235);
 			speed.setText("80");
 			speed.setForeground(Color.WHITE);
 			main.speed = 80;
 			speed.setBackground(Color.GRAY);
-			speed.setDocument((new JTextFieldLimit(3)));
+			speed.setDocument((new JTextFieldLimit(4)));
 			speedok.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent arg0) {
-					try{
+					try {
 						main.speed = Integer.parseInt(speed.getText());
-					}catch(NumberFormatException e){
-						
+					} catch (NumberFormatException e) {
+
 					}
 				}
 			});
-			
+
 			setSize((int) ((M.getSize().height) * (0.2)) + 6, (int) ((M.getSize().width) * (0.6) - 30));
 			setLocation((int) ((M.getSize().height) * (0.84)), 10);
 			setLayout(new GridLayout(6, 1, 0, 15));
@@ -425,9 +421,22 @@ public class GUI extends JFrame{
 									}
 									if (start && end) {
 										main.genMap(Map);
-										main.start();
-										System.out.println(main.currentThread().getState());
-									} else {
+		                                 try {                                 
+		                                    main.start();         // 일단 스레드를 실행해 보고
+		                                     } catch (Exception e) {                                                                                
+		                                       main = null;                                                   
+		                                       main = new Main(buttons);
+		                                       main.genMap(Map);                              
+		                                       System.out.println(speed.getText());	                                    
+		                                       if(!speed.getText().equals(null))
+		                                    	 try{
+		                   						main.speed = Integer.parseInt(speed.getText());}
+		                                       catch(NumberFormatException e2){
+		                                    	   main.speed = 80; // 속도칸이 비워져있으면 기본값 설정
+		                                       }
+		                                       main.start();
+		                                     }		                        
+		                           } else {
 										JOptionPane.showMessageDialog(M, "출발점이나 도착점이 설정되어 있지 않습니다,", "에러",
 												JOptionPane.ERROR_MESSAGE);
 										break;
@@ -437,7 +446,7 @@ public class GUI extends JFrame{
 								}
 								case 2: {
 									JOptionPane.showMessageDialog(M,
-											"경상대학교 자료구조 및 알고리즘 TA \n\n 알고리즘 구현 : 이영섭 \n GUI 제작 : 지평강 ", "제작자 정보",
+											"경상대학교 자료구조 및 알고리즘 TA \n\n 알고리즘 구현 : 이영섭 \n GUI 제작 : 지평강 \n 여담이지만 다들 정말 고생했다... ", "제작자 정보",
 											JOptionPane.INFORMATION_MESSAGE);
 									break;
 								}
@@ -509,17 +518,13 @@ public class GUI extends JFrame{
 										case 1: {
 											for (int a = 0; a < buttons.length; a++) {
 												for (int b = 0; b < buttons[0].length; b++) {
-													if (buttons[a][b].status == 'S') { // 출발점이나
-																						// 도착점이
-																						// 2개가
-																						// 될때,
-																						// 둘의
-																						// 좌표가
-																						// 같으면
-																						// 기존의점을
-																						// 지우는
-																						// 것으로
-																						// 인식
+													if (buttons[a][b].status == 'S') {
+
+														/*
+														 * 출발점이나 도착점이 2개가 될때 둘의
+														 * 좌표가 같으면 기존의점을 지우는 것으로
+														 * 인식
+														 */
 														if (a != i || b != j) {
 															System.out.println("출발점 2개이상 불가능");
 															blocked = 1;
