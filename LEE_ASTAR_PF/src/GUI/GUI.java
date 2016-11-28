@@ -111,6 +111,47 @@ public class GUI extends JFrame {
 			}
 			Map = temp;
 		}
+		
+		public void refreshButtion(){
+			for (int i = 0; i < Map.length; i++) {
+				for (int j = 0; j < Map[0].length; j++) {
+					char pointer = Map[i][j];
+					buttons[i][j].setText("");
+					switch (pointer) {
+					case 'S': {
+						buttons[i][j].setForeground(Color.GREEN);
+						buttons[i][j].setBackground(Color.GREEN);
+						break;
+					}
+					case 'E': {
+						buttons[i][j].setForeground(Color.RED);
+						buttons[i][j].setBackground(Color.RED);
+						break;
+					}
+					case '.': {
+						buttons[i][j].setForeground(Color.DARK_GRAY);
+						buttons[i][j].setBackground(Color.DARK_GRAY);
+						break;
+					}
+					case '-': {
+						buttons[i][j].setForeground(Color.GRAY);
+						buttons[i][j].setBackground(Color.GRAY);
+						break;
+					}
+					case '@': {
+						buttons[i][j].setForeground(Color.CYAN);
+						buttons[i][j].setBackground(Color.CYAN);
+						break;
+					}
+					case 'W': {
+						buttons[i][j].setForeground(Color.WHITE);
+						buttons[i][j].setBackground(Color.WHITE);
+						break;
+					}
+					}
+				}
+			}
+		}
 
 		public void removeRoad() {
 			for (int x = 0; x < buttons.length; x++) {
@@ -220,6 +261,9 @@ public class GUI extends JFrame {
 									break;
 								}
 								case "편집기 시작": {
+									refreshButtion();
+									convertMap();
+									refreshButtion();
 									buttons_BUI2[1].setEnabled(false);
 									for (int x = 0; x < 3; x++) {
 										buttons_BUI[x].setEnabled(true);
@@ -434,6 +478,9 @@ public class GUI extends JFrame {
 		                                       catch(NumberFormatException e2){
 		                                    	   main.speed = 80; // 속도칸이 비워져있으면 기본값 설정
 		                                       }
+		                                       refreshButtion();
+		   									convertMap();
+		   									refreshButtion();
 		                                       main.start();
 		                                     }		                        
 		                           } else {
