@@ -21,6 +21,9 @@ import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Intro extends JFrame {
+	int temprow = 0;
+	int tempcolumn = 0;
+	File f = null;
 	Intro() {
 
 		Image img = null;
@@ -64,9 +67,9 @@ public class Intro extends JFrame {
 
 		c.add(Open);
 		c.add(Exit);
-
+		Font f1 = new Font("µ¸¿ò",Font.ITALIC,17);
 		JLabel Title = new JLabel("A * Algorithm Implemented By JAVA");
-		Title.setFont(new Font("Segoe UI", Font.ITALIC, 17));
+		Title.setFont(f1);
 
 		c.add(Title);
 		Title.setSize(420, 25);
@@ -77,7 +80,6 @@ public class Intro extends JFrame {
 
 		Open.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				File f = null;
 				FileReader fr;
 				try {
 					JFileChooser jfc = new JFileChooser();
@@ -88,14 +90,14 @@ public class Intro extends JFrame {
 						BufferedReader br = new BufferedReader(fr);
 						String line = "";
 						char pointer;
-						int temprow = 0;
-						int tempcolumn = 0;
 						try {
 							while ((line = br.readLine()) != null) {
 								for (int y = 0; y < line.length(); y++) {
 									pointer = line.charAt(y);
 									if (pointer == '.' || pointer == 'E' || pointer == 'S' || pointer == 'W') {
 										temprow++;
+									}else{
+										
 									}
 								}
 								tempcolumn++;
@@ -103,11 +105,7 @@ public class Intro extends JFrame {
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
-						dispose();
-						c.setVisible(false);
-						new GUI(temprow / tempcolumn, tempcolumn, f);
 					} else {
-
 					}
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();

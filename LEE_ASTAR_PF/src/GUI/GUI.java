@@ -30,8 +30,8 @@ public class GUI extends JFrame {
 
 	public GUI(int row, int column, File text) { // GUI ∏ﬁ¿Œ ≈¨∑°Ω∫
 
-		Font main = new Font("∏º¿∫ ∞ÌµÒ", 0, 30);
-		Font sub = new Font("∏º¿∫ ∞ÌµÒ", 0, 15);
+		Font main = new Font("Koverwatch", 0, 30);
+		Font sub = new Font("Koverwatch", 0, 15);
 
 		Image img = null;
 		try {

@@ -11,6 +11,5 @@ public class Clienta {
 		new Intro();
 		// Main ASTAR = new Main();
 		// new GUI();
-		new Intro();
 	}
 }
