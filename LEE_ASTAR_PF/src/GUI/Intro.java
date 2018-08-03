@@ -23,6 +23,8 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Intro extends JFrame {
 	int temprow = 0;
 	int tempcolumn = 0;
+	int row = 0;
+	int column = 0;
 	File f = null;
 	Intro() {
 
@@ -96,12 +98,12 @@ public class Intro extends JFrame {
 									pointer = line.charAt(y);
 									if (pointer == '.' || pointer == 'E' || pointer == 'S' || pointer == 'W') {
 										temprow++;
-									}else{
-										
+									}else if(pointer =='|'){
+										tempcolumn++;
 									}
 								}
-								tempcolumn++;
 							}
+							temprow = temprow / tempcolumn;
 						} catch (IOException e1) {
 							e1.printStackTrace();
 						}
@@ -110,6 +112,8 @@ public class Intro extends JFrame {
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
+				System.out.println(temprow+"-"+tempcolumn);
+				new GUI(temprow+1,tempcolumn+1,f);
 			}
 		});
 
